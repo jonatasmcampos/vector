@@ -14,11 +14,26 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('login');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('cpf')->nullable();
+            $table->string('phone')->nullable();
+            $table->unsignedBigInteger('user_group_id');
+            $table->unsignedBigInteger('user_master_cod');
+            $table->unsignedBigInteger('selected_contract_id');
+            $table->boolean('active');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('user_group_id')
+                ->references('id')
+                ->on('user_groups');
+
+            $table->foreign('selected_contract_id')
+                ->references('id')
+                ->on('contracts');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
