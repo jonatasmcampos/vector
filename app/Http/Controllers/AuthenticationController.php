@@ -27,12 +27,10 @@ class AuthenticationController extends Controller
     }
 
     public function logout(Request $request){
-        return DB::transaction(function() use ($request){
-            $request->user()->currentAccessToken()->delete();
-            return response()->json([
-                'success' => true,
-                'message' => 'Logout realizado com sucesso'
-            ]);
-        });
+        session()->flush();
+        return response()->json([
+            'success' => true,
+            'message' => 'Sessão finalizada!'
+        ]);
     }
 }
