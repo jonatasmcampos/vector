@@ -21,13 +21,11 @@ class LoginUseCase {
     
         $user = $this->getUser($request->getLogin());
         $this->verifyPassword($request->getPassword(), $user->password);
-        $token = $user->createToken('api_token')->plainTextToken;
+        $this->saveSession($user);
 
         return response()->json([
             'success' => true,
-            'message' => 'Login realizado com sucesso!',
-            'api_token' => $token,
-            'data' => $this->getData($user)
+            'message' => 'Login realizado com sucesso!'
         ]);
     }
 
@@ -41,11 +39,11 @@ class LoginUseCase {
         }
     }
 
-    private function getData(User $user): array{
-        return [
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'user_group' => $user->user_group->name
-        ];
+    private function saveSession(User $user){
+        session()->put('user', [
+            'id' => $user->id,
+            'name' => $user->name,
+            'group' => $user->user_group->name
+        ]);
     }
 }
