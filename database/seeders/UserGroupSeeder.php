@@ -14,14 +14,15 @@ class UserGroupSeeder extends Seeder
      */
     public function run(): void
     {
-        $user_groups = [
-            [
-                'id' => UserGroupEnum::PRESIDENTE->value,
-                'name' => 'Presidente',
-                'description' => null
-            ]
-        ];
-
-        DB::table('user_groups')->insert($user_groups);
+        $grupos = UserGroupEnum::getDataToInsert();
+        foreach ($grupos as $grupo) {
+            DB::table('user_groups')->updateOrInsert(
+                ['id' => $grupo['id']],
+                [
+                    'name' => $grupo['name'],
+                    'description' => $grupo['description']
+                ]
+            );
+        }
     }
 }
