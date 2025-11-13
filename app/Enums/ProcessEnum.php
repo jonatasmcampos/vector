@@ -34,9 +34,9 @@ enum ProcessEnum: int
                 'id' => self::SETTINGS->value,
                 'name' => 'Configurações',
                 'description' => null,
-                'route' => 'sem.rota.ainda',
+                'route' => 'config.config.index',
                 'order' => 1,
-                'menu' => 'OUTROS',
+                'menu' => 'CONFIGURAÇÃO',
                 'icon' => 'bi bi-gear',
                 'process' => 'config'
             ]

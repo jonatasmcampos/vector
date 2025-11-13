@@ -16,3 +16,7 @@ Route::get('/gerenciar/limites/listagem', [CreditLimitController::class, 'index'
 Route::get('/gerenciar/limites/novo', [CreditLimitController::class, 'create'])->name('manage.limits.create');
 Route::post('/gerenciar/limites/novo', [CreditLimitController::class, 'store'])->name('manage.limits.store');
 Route::get('/gerenciar/limites/yajra/listagem', [CreditLimitController::class, 'list'])->name('manage.limits.list');
+
+Route::get('/config/config', function(){
+    return response()->json('nada ainda');
+})->name('config.config.index');

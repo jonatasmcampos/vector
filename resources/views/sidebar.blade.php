@@ -85,33 +85,21 @@
 </style>
 
 <aside>
-
     
     <div class="sidebar-header">VECTOR</div>
 
-    
     <nav>
-        <a href="{{ route('view.home') }}"
-           class="option @if(Request::segment(1) == 'dashboard') active @endif">
-            <i class="bi bi-speedometer2"></i> Dashboard
-        </a>
-
-        <div class="sidebar-section-title">Gerenciar</div>
-
-        <ul class="sidebar-options">
-            <li>
-                <a href="{{ route('manage.limits.index') }}"
-                   class="option @if(Request::segment(2) == 'limites') active @endif">
-                    <i class="bi bi-coin"></i> Limites
-                </a>
-            </li>
-        </ul>
-
-        <div class="sidebar-section-title">Outros</div>
-
-        <a href="#" class="option">
-            <i class="bi bi-gear"></i> Configurações
-        </a>
+        @if (session('permissions'))
+            @foreach (session('permissions') as $menu => $permissions)
+                <div class="sidebar-section-title">{{$menu}}</div>
+                @foreach ($permissions as $permission)
+                    <a href="{{ route($permission['route']) }}"
+                        class="option @if(Request::segment(1) == $permission["process"]) active @endif">
+                        <i class="{{$permission['icon']}}"></i> {{$permission['name']}}
+                    </a>
+                @endforeach
+            @endforeach
+        @endif
     </nav>
 
     <footer>
