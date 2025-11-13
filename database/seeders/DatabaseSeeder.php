@@ -18,7 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ContractSeeder::class,
             UserGroupSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            CreditModalitySeeder::class,
+            CreditUsageTypeSeeder::class,
+            CreditPeriodTypeSeeder::class,
+            ActionSeeder::class,
+            ProcessSeeder::class
         ]);
     }
 }

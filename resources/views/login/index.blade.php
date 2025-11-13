@@ -63,7 +63,7 @@
                 $('#btn_entrar').on('click', function(){
                     disableButton('btn_entrar');
 
-                    if(!validarCampos()){
+                    if(!validateFields()){
                         return;
                     }
 
@@ -88,7 +88,7 @@
                 });
             });
 
-            function validarCampos(){
+            function validateFields(){
                 if($('#input_login').val() === '' || $('#input_password').val() === ''){
                     toastr.warning('Preencha os campos!');
                     enableButton('btn_entrar');

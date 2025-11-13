@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('contractor')->nullable();
-            $table->smallInteger('contract_master_cod')->unsigned();
+            $table->unsignedSmallInteger('contract_master_cod');
             $table->string('code');
             $table->boolean('active');
             $table->timestamps();

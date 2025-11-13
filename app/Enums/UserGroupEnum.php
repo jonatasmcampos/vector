@@ -4,5 +4,15 @@ namespace App\Enums;
 
 enum UserGroupEnum: int
 {
-    case PRESIDENTE = 1;
+    case PRESIDENT = 1;
+
+    public static function getDataToInsert(): array{
+        return [
+            [
+                'id' => self::PRESIDENT->value,
+                'name' => 'Presidente',
+                'description' => null,
+            ]
+        ];
+    }
 }
