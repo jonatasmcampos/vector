@@ -4,13 +4,13 @@ namespace App\Enums;
 
 enum CreditModalityEnum: int
 {
-    case AQUISICAO = 1;
-    case PAGAMENTO = 2;
+    case ACQUISITION = 1;
+    case PAYMENT = 2;
 
     public static function getAll(){
         return [
-            self::AQUISICAO->value => 'Aquisição',
-            self::PAGAMENTO->value => 'Pagamento',
+            self::ACQUISITION->value => 'Aquisição',
+            self::PAYMENT->value => 'Pagamento',
         ];
     }
 
@@ -18,12 +18,12 @@ enum CreditModalityEnum: int
     {
         return [
             [
-                'id' => self::AQUISICAO->value,
+                'id' => self::ACQUISITION->value,
                 'name' => 'Aquisição',
                 'description' => 'Finalidade de adquirir bens ou serviços.',
             ],
             [
-                'id' => self::PAGAMENTO->value,
+                'id' => self::PAYMENT->value,
                 'name' => 'Pagamento',
                 'description' => 'Finalidade de pagar de bens ou serviços.',
             ],

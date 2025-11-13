@@ -10,7 +10,9 @@ Route::post('/validar-login', [AuthenticationController::class, 'login'])->name(
 Route::get('/sair', [AuthenticationController::class, 'logout'])->name('auth.logout');
 
 Route::get('/dashboard', [HomeController::class, 'home'])->name('view.home');
+Route::get('/dashboard/load/cards', [HomeController::class, 'loadCards'])->name('view.home.load.cards');
 
 Route::get('/gerenciar/limites/listagem', [CreditLimitController::class, 'index'])->name('manage.limits.index');
 Route::get('/gerenciar/limites/novo', [CreditLimitController::class, 'create'])->name('manage.limits.create');
 Route::post('/gerenciar/limites/novo', [CreditLimitController::class, 'store'])->name('manage.limits.store');
+Route::get('/gerenciar/limites/yajra/listagem', [CreditLimitController::class, 'list'])->name('manage.limits.list');

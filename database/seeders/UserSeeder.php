@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make(12345),
                 'cpf' => null,
                 'phone' => null,
-                'user_group_id' => UserGroupEnum::PRESIDENTE,
+                'user_group_id' => UserGroupEnum::PRESIDENT,
                 'user_master_cod' => 50,
                 'selected_contract_id' => 2,
                 'active' => true,

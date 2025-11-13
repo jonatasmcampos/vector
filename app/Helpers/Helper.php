@@ -26,3 +26,35 @@ if (!function_exists('getMonths')) {
         return $months;
     }
 }
+
+if (!function_exists('getMonth')) {
+    function getMonth(int $month_number): string {
+        return ucfirst(
+            Carbon\Carbon::create(null, $month_number)
+                ->locale('pt_BR')
+                ->translatedFormat('F')
+        );
+    }
+}
+
+if (!function_exists('getYears')) {
+    function getYears(): array {
+        $years = [];
+        $currentYear = now()->year;
+
+        for ($year = 2015; $year <= $currentYear; $year++) {
+            $years[] = $year;
+        }
+
+        return $years;
+    }
+}
+
+if (!function_exists('calculatePercentage')) {
+    function calculatePercentage($total_amount, $part_amount){
+        if($total_amount == 0){
+            return 0;
+        }
+        return ($part_amount * 100) / $total_amount;
+    }
+}

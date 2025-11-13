@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum CreditPeriodTypeEnum: int
 {
-    case MENSAL = 1;
+    case MONTHLY = 1;
 
     public static function getAll(){
         return [
-            self::MENSAL->value => 'Mensal',
+            self::MONTHLY->value => 'Mensal',
         ];
     }
 
@@ -16,7 +16,7 @@ enum CreditPeriodTypeEnum: int
     {
         return [
             [
-                'id' => self::MENSAL->value,
+                'id' => self::MONTHLY->value,
                 'name' => 'Mensal',
                 'description' => 'Vigência mensal.',
             ]

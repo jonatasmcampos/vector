@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CreditModalitySeeder::class,
             CreditUsageTypeSeeder::class,
-            CreditPeriodTypeSeeder::class
+            CreditPeriodTypeSeeder::class,
+            ActionSeeder::class,
+            ProcessSeeder::class
         ]);
     }
 }

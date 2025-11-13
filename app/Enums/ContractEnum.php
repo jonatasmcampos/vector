@@ -7,10 +7,10 @@ enum ContractEnum: int
     case CT5 = 1;
     case CT6 = 2;
 
-    public static function getAll(){
+    public static function getAll(?bool $is_full_name = true){
         return [
-            self::CT5->value => '[CT05] 201/2020 - Pref. Municipal de Anápolis',
-            self::CT6->value => '[CT06] 976/2020  - Pref. Municipal de Aparecida de Goiânia',
+            self::CT5->value => ($is_full_name ? '[CT05] 201/2020 - Pref. Municipal de Anápolis' : 'CT5'),
+            self::CT6->value => ($is_full_name ? '[CT06] 976/2020  - Pref. Municipal de Aparecida de Goiânia' : 'CT6'),
         ];
     }
 

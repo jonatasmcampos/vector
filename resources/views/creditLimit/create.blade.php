@@ -17,7 +17,7 @@
                 <form id="form_create_limit">
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="select_contract">Contrato: </label>
+                            <label for="select_contract">Contrato: <span style="color: red">*</span></label>
                             <select required name="contract_id" id="select_contract" class="form-select">
                                 <option value="">Selectione um contrato ... </option>
                                 @foreach ($contracts as $index => $contract)
@@ -28,38 +28,38 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-12 col-xl-4 mb-3 mb-xl-0">
-                            <label for="input_authorized_amount">Valor autorizado: </label>
+                            <label for="input_authorized_amount">Valor autorizado: <span style="color: red">*</span></label>
                             <input class="form-control" type="text" id="input_authorized_amount" required name="authorized_amount">
                         </div>
                         <div class="col-12 col-xl-4 mb-3 mb-xl-0">
-                            <label for="select_purpose">Este limite sera usado para: </label>
-                            <select required name="purpose_id" id="select_purpose" class="form-select">
+                            <label for="select_usage_type">Este limite sera usado para: <span style="color: red">*</span></label>
+                            <select required name="credit_usage_type_id" id="select_usage_type" class="form-select">
                                 <option value="">Selectione a finalidade ... </option>
-                                @foreach ($purposes as $index => $purpose)
-                                    <option value="{{ $index + 1 }}">{{ $purpose }}</option>
+                                @foreach ($credit_usage_types as $credit_usage_type_id => $credit_usage_type)
+                                    <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-12 col-xl-4">
-                            <label for="select_modality">Qual modalidade: </label>
-                            <select required name="modality_id" id="select_modality" class="form-select">
+                            <label for="select_modality">Qual modalidade: <span style="color: red">*</span></label>
+                            <select required name="credit_modality_id" id="select_modality" class="form-select">
                                 <option value="">Selectione a modalidade ... </option>
-                                @foreach ($modalities as $index => $modality)
-                                    <option value="{{ $index + 1 }}">{{ $modality }}</option>
+                                @foreach ($credit_modalities as $credit_modality_id => $credit_modality)
+                                    <option value="{{ $credit_modality_id }}">{{ $credit_modality }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-12 col-xl-6 mb-3 mb-xl-0">
-                            <label for="select_period_types">Vigência: </label>
-                            <select required name="period_type_id" id="select_period_types" class="form-select">
-                                <option value="{{ App\Enums\CreditPeriodTypeEnum::MENSAL->value}}" selected>{{ $period_types[App\Enums\CreditPeriodTypeEnum::MENSAL->value] }}</option>
+                            <label for="select_period_types">Vigência: <span style="color: red">*</span></label>
+                            <select required name="credit_period_type_id" id="select_period_types" class="form-select">
+                                <option value="{{ App\Enums\CreditPeriodTypeEnum::MONTHLY->value}}" selected>{{ $credit_period_types[App\Enums\CreditPeriodTypeEnum::MONTHLY->value] }}</option>
                             </select>
                         </div>
                         <div class="col-12 col-xl-6">
-                            <label for="select_reference_month">Mês de referência: </label>
-                            <select required name="reference_month" id="select_reference_month" class="form-select">
+                            <label for="select_reference_month">Mês de referência: <span style="color: red">*</span></label>
+                            <select required name="month" id="select_reference_month" class="form-select">
                                 <option value="">Selectione um mês de referência ... </option>
                                 @foreach ($months as $index => $month)
                                     <option value="{{ $index + 1 }}">{{ $month }}</option>
@@ -82,31 +82,48 @@
             </div>
         </div>
     </section>
-
-    <script>
-        $(document).ready(function(){
-            $('#input_authorized_amount').mask('0.000.000,00', {reverse: true});
-            $('#btn_create_limit').on('click', function(){
-                const form = $('#form_create_limit')[0];
-                if (!form.checkValidity()) {
-                    form.reportValidity();
-                    return;
-                }
-                disableButton('btn_create_limit');
-                $.ajax({
-                    url: @json(route('manage.limits.store')),
-                    headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
-                    method: 'POST',
-                    data: $('#form_create_limit').serialize(),
-                    success: function(response){
-                        toastr.success(response.responseJSON.message);
-                    },
-                    error: function(err){
-                        toastr.error(err.responseJSON.message);
-                        enableButton('btn_create_limit');
-                    }
-                });
+    
+    @push('scripts')
+        <script>
+            $(document).ready(function(){
+                applyMaskToTheAmountField();
+                saveTheNewLimitListener();
             });
-        });
-    </script>
+
+            function applyMaskToTheAmountField(){
+                $('#input_authorized_amount').mask('0.000.000,00', {reverse: true});
+            }
+
+            function saveTheNewLimitListener(){
+                $('#btn_create_limit').on('click', function(){
+                    const form = $('#form_create_limit')[0];
+                    if (!form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                    }
+                    disableButton('btn_create_limit');
+                    $.ajax({
+                        url: @json(route('manage.limits.store')),
+                        headers: {"X-CSRF-TOKEN": "{{ csrf_token() }}"},
+                        method: 'POST',
+                        data: $('#form_create_limit').serialize(),
+                        success: function(response){
+                            toastr.success(response.message);
+                            $('#form_create_limit')[0].reset();
+                            enableButton('btn_create_limit');
+                        },
+                        error: function(err){
+                        console.log(err.responseJSON)
+                            if(err.responseJSON.errors){
+                                toastr.error(err.responseJSON.errors);
+                            } else {
+                                toastr.error(err.responseJSON.message);
+                            }
+                            enableButton('btn_create_limit');
+                        }
+                    });
+                });
+            }
+        </script>
+    @endpush
 @endsection

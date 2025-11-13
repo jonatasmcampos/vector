@@ -78,21 +78,24 @@
     a{
         text-decoration: none
     }
+
+    nav{
+        padding: 0 7px
+    }
 </style>
 
 <aside>
 
-    {{-- LOGO / Nome --}}
+    
     <div class="sidebar-header">VECTOR</div>
 
-    {{-- Dashboard --}}
+    
     <nav>
         <a href="{{ route('view.home') }}"
-           class="option @if(Request::segment(1) == 'home') active @endif">
+           class="option @if(Request::segment(1) == 'dashboard') active @endif">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
 
-        {{-- Sessão: Gerenciar --}}
         <div class="sidebar-section-title">Gerenciar</div>
 
         <ul class="sidebar-options">
@@ -104,7 +107,6 @@
             </li>
         </ul>
 
-        {{-- Sessão: Outros --}}
         <div class="sidebar-section-title">Outros</div>
 
         <a href="#" class="option">
@@ -112,7 +114,6 @@
         </a>
     </nav>
 
-    {{-- Rodapé --}}
     <footer>
         @php
             $names = explode(' ', session('user.name'));
