@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('credit_limit_balance_histories', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
-            $table->bigInteger('used_amount');
-            $table->bigInteger('old_used_amount');
-            $table->bigInteger('new_used_amount');
+            $table->unsignedBigInteger('used_amount');
+            $table->unsignedBigInteger('old_used_amount');
+            $table->unsignedBigInteger('new_used_amount');
             $table->bigInteger('old_balance');
             $table->bigInteger('new_balance');
             $table->unsignedBigInteger('credit_limit_balance_id');

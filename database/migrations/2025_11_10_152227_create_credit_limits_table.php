@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('credit_limits', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('authorized_amount');
+            $table->unsignedBigInteger('authorized_amount');
             $table->unsignedTinyInteger('month');
             $table->unsignedSmallInteger('year');
             $table->unsignedBigInteger('contract_id');

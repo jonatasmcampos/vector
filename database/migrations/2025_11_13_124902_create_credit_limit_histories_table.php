@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('credit_limit_histories', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('authorized_amount');
-            $table->bigInteger('old_authorized_amount');
-            $table->bigInteger('new_authorized_amount');
+            $table->unsignedBigInteger('authorized_amount');
+            $table->unsignedBigInteger('old_authorized_amount');
+            $table->unsignedBigInteger('new_authorized_amount');
             $table->dateTime('date');
             $table->unsignedBigInteger('credit_limit_id');
             $table->unsignedBigInteger('history_id');
