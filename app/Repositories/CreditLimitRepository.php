@@ -29,11 +29,13 @@ class CreditLimitRepository {
     public function getByMonthYearAndContractId(
         int $month,
         int $year,
-        int $contract_id
+        int $contract_id,
+        int $credit_usage_type_id
     ){
         return CreditLimit::where('month', $month)
         ->where('year', $year)
         ->where('contract_id', $contract_id)
+        ->where('credit_usage_type_id', $credit_usage_type_id)
         ->get();
     }
 }

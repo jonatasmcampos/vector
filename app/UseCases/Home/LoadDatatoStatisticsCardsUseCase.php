@@ -27,7 +27,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
         $credit_limits = $this->getCreditLimit(
             $get_data_to_dashboard_dto->getMonth(),
             $get_data_to_dashboard_dto->getYear(),
-            $get_data_to_dashboard_dto->getContractId()
+            $get_data_to_dashboard_dto->getContractId(),
+            $get_data_to_dashboard_dto->getCreditUsageTypeId()
         );
         
         return $this->getData($credit_limits);
@@ -74,9 +75,10 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
     private function getCreditLimit(
         int $month,
         int $year,
-        int $contract_id
+        int $contract_id,
+        int $credit_usage_type_id
     ): Collection{
-        return $this->credit_limit_repository->getByMonthYearAndContractId($month, $year, $contract_id);
+        return $this->credit_limit_repository->getByMonthYearAndContractId($month, $year, $contract_id, $credit_usage_type_id);
     }
     
 }
