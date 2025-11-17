@@ -25,12 +25,14 @@ class DatabaseSeeder extends Seeder
             ActionSeeder::class,
             ProcessSeeder::class,
             InstallmentTypeSeeder::class,
-            OriginEntitySeeder::class,
             PaymentMethodSeeder::class,
             PaymentNatureSeeder::class,
             StatusSeeder::class,
             InstallmentAmountTypeSeeder::class,
-            TransactionTypeSeeder::class
+            TransactionTypeSeeder::class,
+            AddressSeeder::class,
+            SupplierSeeder::class,
+            PurchaseOrderTypeSeeder::class
         ]);
     }
 }

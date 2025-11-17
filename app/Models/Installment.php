@@ -12,11 +12,9 @@ class Installment extends Model
         'installment_amount',
         'due_day',
         'order',
-        'transaction_id',
-        'identifier',
         'paid_at',
         'amount_paid',
-        'status_id',
+        'external_identifier',
         'installment_amount_type_id',
         'installment_type_id',
     ];
@@ -46,5 +44,10 @@ class Installment extends Model
     public function installment_type()
     {
         return $this->belongsTo(Transaction::class, 'installment_type_id', 'id');
+    }
+
+    public function owning_entity()
+    {
+        return $this->morphTo();
     }
 }

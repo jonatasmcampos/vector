@@ -2,21 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Enums\OriginEntityEnum;
+use App\Enums\PurchaseOrderTypeEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class OriginEntitySeeder extends Seeder
+class PurchaseOrderTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $datas = OriginEntityEnum::getDataToInsert();
+        $datas = PurchaseOrderTypeEnum::getDataToInsert();
         foreach ($datas as $data) {
-            DB::table('origin_entities')->updateOrInsert(
+            DB::table('purchase_order_types')->updateOrInsert(
                 ['id' => $data['id']],   
                 [
                     'name' => $data['name'],

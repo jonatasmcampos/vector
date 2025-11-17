@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('origin_entities', function (Blueprint $table) {
+        Schema::create('purchase_order_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('origin_entities');
+        Schema::dropIfExists('purchase_order_types');
     }
 };

@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OriginEntity extends Model
+class PurchaseOrderType extends Model
 {
-    protected $table = 'origin_entities';
+    protected $table = 'purchase_order_types';
     protected $fillable = [
         'name',
         'description',

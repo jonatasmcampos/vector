@@ -16,22 +16,13 @@ return new class extends Migration
             $table->bigInteger('installment_amount');
             $table->date('due_day');
             $table->unsignedTinyInteger('order');
-            $table->unsignedBigInteger('transaction_id');
-            $table->unsignedBigInteger('identifier');
             $table->dateTime('paid_at')->nullable();
             $table->bigInteger('amount_paid')->nullable();
-            $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('external_identifier');
             $table->unsignedBigInteger('installment_amount_type_id');
             $table->unsignedBigInteger('installment_type_id');
+            $table->morphs('owning_entity');
             $table->timestamps();
-
-            $table->foreign('transaction_id')
-                ->references('id')
-                ->on('transactions');
-            
-            $table->foreign('status_id')
-                ->references('id')
-                ->on('statuses');
             
             $table->foreign('installment_amount_type_id')
                 ->references('id')
