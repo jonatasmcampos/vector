@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Installment extends Model
+class InstallmentHistory extends Model
 {
-    protected $table = 'installments';
+    protected $table = 'installment_histories';
 
     protected $fillable = [
+        'history_id',
         'installment_amount',
         'due_day',
         'order',
@@ -17,16 +18,23 @@ class Installment extends Model
         'external_identifier',
         'installment_amount_type_id',
         'installment_type_id',
+        'installment_id',
         'contract_id'
     ];
 
     protected $casts = [
+        'history_id' => 'integer',
         'installment_amount' => 'integer',
         'amount_paid' => 'integer',
         'paid_at' => 'datetime',
         'due_day' => 'date',
+        'installment_id' => 'integer',
         'contract_id' => 'integer'
     ];
+
+    public function history(){
+        return $this->belongsTo(History::class, 'history_id', 'id');
+    }
 
     public function transaction()
     {
@@ -35,25 +43,21 @@ class Installment extends Model
 
     public function status()
     {
-        return $this->belongsTo(Transaction::class, 'status_id', 'id');
+        return $this->belongsTo(Status::class, 'status_id', 'id');
     }
 
     public function installment_amount_type()
     {
-        return $this->belongsTo(Transaction::class, 'installment_amount_type_id', 'id');
+        return $this->belongsTo(InstallmentAmountType::class, 'installment_amount_type_id', 'id');
     }
 
     public function installment_type()
     {
-        return $this->belongsTo(Transaction::class, 'installment_type_id', 'id');
+        return $this->belongsTo(InstallmentType::class, 'installment_type_id', 'id');
     }
 
-    public function owning_entity()
-    {
-        return $this->morphTo();
+    public function installment(){
+        return $this->belongsTo(Installment::class, 'installment_id', 'id');
     }
 
-    public function installment_history(){
-        return $this->hasOne(InstallmentHistory::class);
-    }
 }

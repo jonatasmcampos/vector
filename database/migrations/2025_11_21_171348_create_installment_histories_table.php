@@ -11,20 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('installments', function (Blueprint $table) {
+        Schema::create('installment_histories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('history_id');
+            $table->unsignedBigInteger('installment_id');
             $table->bigInteger('installment_amount');
             $table->date('due_day');
             $table->unsignedTinyInteger('order');
             $table->dateTime('paid_at')->nullable();
-            $table->bigInteger('amount_paid');
+            $table->bigInteger('amount_paid')->nullable();
             $table->unsignedBigInteger('external_identifier');
             $table->unsignedBigInteger('installment_amount_type_id');
             $table->unsignedBigInteger('installment_type_id');
             $table->unsignedBigInteger('contract_id');
-            $table->morphs('owning_entity');
             $table->timestamps();
             
+            $table->foreign('installment_id')
+                ->references('id')
+                ->on('installments');
+
+            $table->foreign('history_id')
+                ->references('id')
+                ->on('histories');
+
             $table->foreign('installment_amount_type_id')
                 ->references('id')
                 ->on('installment_amount_types');
@@ -44,6 +53,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('installments');
+        Schema::dropIfExists('installment_histories');
     }
 };

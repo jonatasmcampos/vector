@@ -7,6 +7,7 @@ enum ProcessEnum: int
     case DASHBOARD = 1;
     case MANAGE_LIMIT = 2;
     case SETTINGS = 3;
+    case EXTERNAL_PURCHASE_ORDER_CREATION = 4;
 
     public static function getDataToInsert(): array{
         return [
@@ -39,7 +40,17 @@ enum ProcessEnum: int
                 'menu' => 'CONFIGURAÇÃO',
                 'icon' => 'bi bi-gear',
                 'process' => 'config'
-            ]
+            ],
+            [
+                'id' => self::EXTERNAL_PURCHASE_ORDER_CREATION->value,
+                'name' => 'Listagem de ordem de compra',
+                'description' => null,
+                'route' => 'config.config.index',
+                'order' => 1,
+                'menu' => 'DADOS EXTERNOS',
+                'icon' => 'bi bi-gear',
+                'process' => 'purchase_order'
+            ],
         ];
     }
 }

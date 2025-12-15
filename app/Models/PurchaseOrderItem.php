@@ -13,6 +13,7 @@ class PurchaseOrderItem extends Model
         'total_amount',
         'quantity',
         'purchase_order_id',
+        'contract_id'
     ];
 
     public function purchase_order()

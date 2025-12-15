@@ -10,7 +10,6 @@ class History extends Model
     protected $fillable = [
         'date',
         'observation',
-        'model',
         'user_id',
         'action_id',
         'process_id',
@@ -38,5 +37,10 @@ class History extends Model
 
     public function contract(){
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
+    }
+
+    public function installment_histories()
+    {
+        return $this->hasMany(InstallmentHistory::class);
     }
 }

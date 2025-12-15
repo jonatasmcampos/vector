@@ -31,7 +31,7 @@ class CreditLimitBalance extends Model
     }
 
     public function credit_limit(){
-        return $this->belongsTo(Contract::class, 'credit_limit_id', 'id');
+        return $this->belongsTo(CreditLimit::class, 'credit_limit_id', 'id');
     }
 
 }

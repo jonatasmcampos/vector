@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('purchase_order_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('history_id')->index();
+            $table->unsignedBigInteger('purchase_order_id')->index();
             $table->unsignedBigInteger('total');
             $table->unsignedBigInteger('external_identifier')->index();
             $table->unsignedBigInteger('purchase_order_type_id')->index();
@@ -31,6 +32,10 @@ return new class extends Migration
             $table->unsignedBigInteger('payment_method_id')->index();
             $table->unsignedTinyInteger('installments_number');
             $table->timestamps();
+
+            $table->foreign('purchase_order_id')
+                ->references('id')
+                ->on('purchase_orders');
 
             $table->foreign('history_id')
                 ->references('id')

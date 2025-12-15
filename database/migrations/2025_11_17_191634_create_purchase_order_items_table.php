@@ -19,11 +19,16 @@ return new class extends Migration
             $table->unsignedBigInteger('total_amount');
             $table->unsignedTinyInteger('quantity');
             $table->unsignedBigInteger('purchase_order_id')->index();
+            $table->unsignedBigInteger('contract_id')->index();
             $table->timestamps();
 
             $table->foreign('purchase_order_id')
                 ->references('id')
                 ->on('purchase_orders');
+
+            $table->foreign('contract_id')
+                ->references('id')
+                ->on('contracts');
         });
     }
 

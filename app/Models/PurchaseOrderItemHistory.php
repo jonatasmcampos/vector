@@ -14,6 +14,8 @@ class PurchaseOrderItemHistory extends Model
         'total_amount',
         'quantity',
         'purchase_order_id',
+        'purchase_order_item_id',
+        'contract_id'
     ];
 
     public function history()
@@ -23,5 +25,9 @@ class PurchaseOrderItemHistory extends Model
     public function purchase_order()
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id', 'id');
+    }
+    public function purchase_order_item()
+    {
+        return $this->belongsTo(PurchaseOrderItem::class, 'purchase_order_item_id', 'id');
     }
 }

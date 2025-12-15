@@ -39,7 +39,7 @@ class CreditLimitBalanceHistory extends Model
     }
 
     public function credit_limit_balance(){
-        return $this->belongsTo(Contract::class, 'credit_limit_balance_id', 'id');
+        return $this->belongsTo(CreditLimitBalance::class, 'credit_limit_balance_id', 'id');
     }
 
     public function history(){

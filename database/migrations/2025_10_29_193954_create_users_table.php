@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->unsignedBigInteger('user_group_id');
             $table->unsignedBigInteger('user_master_cod');
-            $table->unsignedBigInteger('selected_contract_id');
             $table->boolean('active');
             $table->rememberToken();
             $table->timestamps();
@@ -30,10 +29,6 @@ return new class extends Migration
             $table->foreign('user_group_id')
                 ->references('id')
                 ->on('user_groups');
-
-            $table->foreign('selected_contract_id')
-                ->references('id')
-                ->on('contracts');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

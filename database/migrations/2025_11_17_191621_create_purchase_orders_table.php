@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('total');
             $table->unsignedBigInteger('external_identifier')->index();
             $table->unsignedBigInteger('purchase_order_type_id')->index();
-            $table->unsignedBigInteger('credit_limit_id')->index();
             $table->unsignedBigInteger('contract_id')->index();
             $table->unsignedBigInteger('external_display_id');
             $table->unsignedBigInteger('status_id')->index();
@@ -35,10 +34,6 @@ return new class extends Migration
             $table->foreign('purchase_order_type_id')
                 ->references('id')
                 ->on('purchase_order_types');
-
-            $table->foreign('credit_limit_id')
-                ->references('id')
-                ->on('credit_limits');
 
             $table->foreign('contract_id')
                 ->references('id')

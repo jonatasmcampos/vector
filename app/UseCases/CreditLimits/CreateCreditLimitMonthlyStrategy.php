@@ -58,14 +58,12 @@ class CreateCreditLimitMonthlyStrategy implements CreateCreditLimitInterface{
         $credit_limit_history = $this->createHistory(
             $create_credit_limit_dto->getUserId(),
             $create_credit_limit_dto->getContractId(),
-            'CreditLimit',
             ActionEnum::MANAGE_CREATE_CREDIT_LIMIT->value,
             null
         );
         $credit_limit_balance_history = $this->createHistory(
             $create_credit_limit_dto->getUserId(),
             $create_credit_limit_dto->getContractId(),
-            'CreditLimitBalance',
             ActionEnum::MANAGE_CREATE_CREDIT_LIMIT_BALANCE->value,
             null
         );
@@ -88,12 +86,11 @@ class CreateCreditLimitMonthlyStrategy implements CreateCreditLimitInterface{
         );
     }
 
-    private function createHistory(int $user_id, int $contract_id, string $model, int $action, ?string $observation = null): History{
+    private function createHistory(int $user_id, int $contract_id, int $action, ?string $observation = null): History{
         return $this->create_history_use_case->handle(
             new CreateHistoryDTO(
                 Carbon::now(),
                 $observation,
-                $model,
                 $user_id,
                 $action,
                 ProcessEnum::MANAGE_LIMIT->value,

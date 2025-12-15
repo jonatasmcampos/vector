@@ -9,6 +9,7 @@ class PurchaseOrderHistory extends Model
     protected $table = 'purchase_order_histories';
     protected $fillable = [
         'history_id',
+        'purchase_order_id',
         'total',
         'external_identifier',
         'purchase_order_type_id',
@@ -25,6 +26,7 @@ class PurchaseOrderHistory extends Model
         'payment_nature_id',
         'payment_method_id',
         'installments_number',
+        'contract_id'
     ];
 
     public function history(){
@@ -56,5 +58,8 @@ class PurchaseOrderHistory extends Model
     }
     public function purchase_order_items(){
         return $this->hasMany(PurchaseOrderItem::class);
+    }
+    public function purchase_order(){
+        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id', 'id');
     }
 }

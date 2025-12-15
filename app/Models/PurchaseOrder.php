@@ -11,7 +11,6 @@ class PurchaseOrder extends Model
         'total',
         'external_identifier',
         'purchase_order_type_id',
-        'credit_limit_id',
         'contract_id',
         'external_display_id',
         'status_id',
@@ -26,11 +25,17 @@ class PurchaseOrder extends Model
         'installments_number',
     ];
 
+    protected $cast = [
+        'total' => 'integer',
+        'cif' => 'integer',
+        'fob' => 'integer',
+        'total_items' => 'integer',
+        'discount' => 'integer',
+        'installments_number' => 'integer',
+    ];
+
     public function purchase_order_type(){
         return $this->belongsTo(PurchaseOrderType::class, 'purchase_order_type_id', 'id');
-    }
-    public function credit_limit(){
-        return $this->belongsTo(CreditLimit::class, 'credit_limit_id', 'id');
     }
     public function contract(){
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
@@ -52,5 +57,8 @@ class PurchaseOrder extends Model
     }
     public function purchase_order_items(){
         return $this->hasMany(PurchaseOrderItem::class);
+    }
+    public function installments(){
+        return $this->morphMany(Installment::class, 'owning_entity');
     }
 }
