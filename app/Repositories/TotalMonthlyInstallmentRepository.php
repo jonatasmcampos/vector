@@ -26,6 +26,9 @@ class TotalMonthlyInstallmentRepository{
         array $data
     ){
         $total_monthly_installment = TotalMonthlyInstallment::find($total_monthly_installment_id);
+        if(!$total_monthly_installment){
+            throw new \Exception("Valor total mensal não encontrado!", 404);
+        }
         return $total_monthly_installment->update($data);
     }
 

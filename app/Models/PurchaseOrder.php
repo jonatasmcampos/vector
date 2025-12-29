@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Domain\Contracts\Installment\InstallmentableInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class PurchaseOrder extends Model
+class PurchaseOrder extends Model implements InstallmentableInterface
 {
     protected $table = 'purchase_orders';
     protected $fillable = [
@@ -58,7 +60,10 @@ class PurchaseOrder extends Model
     public function purchase_order_items(){
         return $this->hasMany(PurchaseOrderItem::class);
     }
-    public function installments(){
+    public function installments(): MorphMany{
         return $this->morphMany(Installment::class, 'owning_entity');
+    }
+    public function getContractId(): int{
+        return $this->contract_id;
     }
 }

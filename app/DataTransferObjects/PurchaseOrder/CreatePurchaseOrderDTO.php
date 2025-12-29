@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataTransferObjects\PurchaseOrders;
+namespace App\DataTransferObjects\PurchaseOrder;
 
 class CreatePurchaseOrderDTO {
     private array $header;

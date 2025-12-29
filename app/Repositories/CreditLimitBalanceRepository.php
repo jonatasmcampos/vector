@@ -44,14 +44,14 @@ class CreditLimitBalanceRepository {
         int $credit_usage_type_id,
         int $credit_modality_id
     ): ?CreditLimitBalance{
-
+        
         $credit_limit_balance = CreditLimitBalance::whereRelation('credit_limit','month', $month)
-        ->whereRelation('credit_limit', 'year', $year)
-        ->whereRelation('credit_limit', 'contract_id', $contract_id)
-        ->whereRelation('credit_limit', 'credit_usage_type_id', $credit_usage_type_id)
-        ->whereRelation('credit_limit', 'credit_modality_id', $credit_modality_id)
-        ->lockForUpdate()
-        ->first();
+            ->whereRelation('credit_limit', 'year', $year)
+            ->whereRelation('credit_limit', 'contract_id', $contract_id)
+            ->whereRelation('credit_limit', 'credit_usage_type_id', $credit_usage_type_id)
+            ->whereRelation('credit_limit', 'credit_modality_id', $credit_modality_id)
+            ->lockForUpdate()
+            ->first();
 
         if(!$credit_limit_balance){
             throw new \Exception("Não há limite de crédito cadastrado no sistema!", 404);
