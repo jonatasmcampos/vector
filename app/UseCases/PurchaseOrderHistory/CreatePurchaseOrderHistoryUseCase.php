@@ -26,7 +26,7 @@ class CreatePurchaseOrderHistoryUseCase{
             $create_purchase_order_history_dto->getPurchaseOrder()->total,
             $create_purchase_order_history_dto->getPurchaseOrder()->external_identifier,
             $create_purchase_order_history_dto->getPurchaseOrder()->purchase_order_type_id,
-            $create_purchase_order_history_dto->getCreditLimitBalance()->credit_limit_id,
+            $create_purchase_order_history_dto->getCreditLimitId(),
             $create_purchase_order_history_dto->getPurchaseOrder()->contract_id,
             $create_purchase_order_history_dto->getPurchaseOrder()->external_display_id,
             $create_purchase_order_history_dto->getPurchaseOrder()->status_id,

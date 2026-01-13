@@ -16,6 +16,10 @@ class Transaction extends Model
         'contract_id',
         'credit_limit_id',
         'installment_id',
+        'transaction_entity_type',
+        'transaction_entity_id',
+        'balance_history_type',
+        'balance_history_id'
     ];
 
     protected $casts = [
@@ -43,7 +47,7 @@ class Transaction extends Model
     }
 
     public function installment(){
-        return $this->hasMany(Installment::class);
+        return $this->belongsTo(Installment::class);
     }
 
     public function transaction_entity()

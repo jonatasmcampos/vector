@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CreditLimitBalance extends Model
+class MonthlyCreditLimitBalance extends Model
 {
-    protected $table = 'credit_limit_balances';
+    protected $table = 'monthly_credit_limit_balances';
     protected $fillable = [
         'total_used_amount',
         'balance',
         'credit_limit_id',
-        'contract_id',
-        'active'
+        'contract_id'
     ];
     
     protected function casts(): array
@@ -21,8 +20,7 @@ class CreditLimitBalance extends Model
             'total_used_amount' => 'integer',
             'balance' => 'integer',
             'credit_limit_id' => 'integer',
-            'contract_id' => 'integer',
-            'active' => 'boolean'
+            'contract_id' => 'integer'
         ];
     }
 

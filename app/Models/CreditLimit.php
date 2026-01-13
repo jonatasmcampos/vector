@@ -49,8 +49,8 @@ class CreditLimit extends Model
         return $this->belongsTo(CreditUsageType::class, 'credit_period_type_id', 'id');
     }
 
-    public function credit_limit_balance(){
-        return $this->hasOne(CreditLimitBalance::class, 'credit_limit_id', 'id');
+    public function monthly_credit_limit_balance(){
+        return $this->hasOne(MonthlyCreditLimitBalance::class, 'credit_limit_id', 'id');
     }
 
     public function isAcquisitionModality(): bool

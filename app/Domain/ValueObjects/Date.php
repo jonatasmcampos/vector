@@ -4,7 +4,7 @@ namespace App\Domain\ValueObjects;
 
 use Carbon\Carbon;
 
-class Date
+final class Date
 {
     private Carbon $value;
 

@@ -4,7 +4,7 @@ namespace App\DataTransferObjects\CreditLimitBalance;
 
 use App\Domain\ValueObjects\AmountInCents;
 
-class CreateCreditLimitBalanceDTO {
+class CreateMonthlyCreditLimitBalanceDTO {
     
     private AmountInCents $total_used_amount;
     private AmountInCents $balance;

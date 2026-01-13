@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('credit_limit_balance_histories', function (Blueprint $table) {
+        Schema::create('monthly_credit_limit_balance_histories', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
             $table->unsignedBigInteger('used_amount');
@@ -19,15 +19,17 @@ return new class extends Migration
             $table->unsignedBigInteger('new_used_amount');
             $table->bigInteger('old_balance');
             $table->bigInteger('new_balance');
-            $table->unsignedBigInteger('credit_limit_balance_id');
+            $table->unsignedBigInteger('monthly_credit_limit_balance_id');
             $table->unsignedBigInteger('history_id');
             $table->unsignedBigInteger('contract_id');
             $table->timestamps();
 
 
-            $table->foreign('credit_limit_balance_id')
-                ->references('id')
-                ->on('credit_limit_balances');
+            $table->foreign(
+                'monthly_credit_limit_balance_id',
+                'fk_mclb_hist_mclb'
+            )->references('id')
+            ->on('monthly_credit_limit_balances');
             
             $table->foreign('history_id')
                 ->references('id')

@@ -7,6 +7,7 @@ enum ActionEnum: int
     case MANAGE_CREATE_CREDIT_LIMIT = 1;
     case MANAGE_CREATE_CREDIT_LIMIT_BALANCE = 2;
     case PURCHASE_GENERATED = 3;
+    case CREDIT_LIMIT_BALANCE_UPDATED = 4;
 
     public static function getDataToInsert(): array{
         return [
@@ -24,6 +25,11 @@ enum ActionEnum: int
                 'id' => self::PURCHASE_GENERATED->value,
                 'name' => 'compra gerada',
                 'description' => 'foi realizada uma compra',
+            ],
+            [
+                'id' => self::CREDIT_LIMIT_BALANCE_UPDATED->value,
+                'name' => 'limite de crédito atualizado',
+                'description' => 'foi atualizado o limite de crédito',
             ],
         ];
     }

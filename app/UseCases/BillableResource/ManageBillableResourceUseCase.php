@@ -2,32 +2,75 @@
 
 namespace App\UseCases\BillableResource;
 
+use App\DataTransferObjects\BillableResource\TransactionsDataDTO;
+use App\DataTransferObjects\CreditLimitBalance\ManageBalanceUpdateDTO;
+use App\DataTransferObjects\CreditLimitBalance\UpdateCreditLimitBalanceDTO;
 use App\DataTransferObjects\CreditLimitBalance\VerifyBalanceDTO;
 use App\Domain\Contracts\BillableResource\BillableResourceInterface;
+use App\Domain\ValueObjects\CreditLimitBalanceHistorySnapshot;
+use App\Models\Transaction;
+use App\UseCases\CreditLimitBalances\UpdateCreditLimitBalanceUseCase;
 use App\UseCases\CreditLimitBalances\VerifyBalanceUseCase;
+use App\UseCases\Transaction\CreateTransactionUseCase;
 
 class ManageBillableResourceUseCase{
 
     private VerifyBalanceUseCase $verify_balance_use_case;
+    private CreateTransactionUseCase $create_transaction_use_case;
+    private UpdateCreditLimitBalanceUseCase $update_credit_limit_balance_use_case;
 
     public function __construct(
-        VerifyBalanceUseCase $verify_balance_use_case
+        VerifyBalanceUseCase $verify_balance_use_case,
+        CreateTransactionUseCase $create_transaction_use_case,
+        UpdateCreditLimitBalanceUseCase $update_credit_limit_balance_use_case,
     ){
         $this->verify_balance_use_case = $verify_balance_use_case;
+        $this->create_transaction_use_case = $create_transaction_use_case;
+        $this->update_credit_limit_balance_use_case = $update_credit_limit_balance_use_case;
     }
 
     public function handle(BillableResourceInterface $billable_resource): void{
-        $verify_balance_dto = $this->getVerifyBalanceDTO($billable_resource);
-        $this->verify_balance_use_case->validate($verify_balance_dto);
-        $billable_resource->execute();
+        $this->verify_balance_use_case->validate(
+            new VerifyBalanceDTO(
+                $billable_resource->getTotalAmount(),
+                $billable_resource->getInstallments(),
+                $billable_resource->getAcquisitionCreditLimitBalanceSnapshot()->balance,
+                $billable_resource->getPaymentCreditLimitBalanceSnapshot()->balance
+            )
+        );
+        $transaction_data = $billable_resource->execute();
+
+        $balance_history = $this->manageBalanceUpdate($billable_resource, $transaction_data);
+
+        $this->registerTransaction($transaction_data, $balance_history);
     }
 
-    private function getVerifyBalanceDTO(BillableResourceInterface $billable_resource): VerifyBalanceDTO{
-        return new VerifyBalanceDTO(
-            $billable_resource->getActionDate(),
-            $billable_resource->getContractId(),
-            $billable_resource->getTotalAmount(),
-            $billable_resource->getInstallments()
+    private function manageBalanceUpdate(
+        BillableResourceInterface $billable_resource,
+        TransactionsDataDTO $transaction_data
+    ){
+        return $this->update_credit_limit_balance_use_case->handle(
+            new UpdateCreditLimitBalanceDTO(
+                $transaction_data->getCreditLimitBalanceId(),
+                $transaction_data->getCreditLimitId(),
+                $billable_resource->getCreditPeriodTypeId(),
+                $transaction_data->getContractId(),
+                $billable_resource->getCreditUsageTypeId(),
+                $billable_resource->getCreditModalityId(),
+                $transaction_data->getAmount(),
+                $billable_resource->getAcquisitionCreditLimitBalanceSnapshot(),
+                $billable_resource->getPaymentCreditLimitBalanceSnapshot(),
+                $transaction_data->getUserId()
+            )
         );
+    }
+
+    private function registerTransaction(
+        TransactionsDataDTO $transaction_data,
+        CreditLimitBalanceHistorySnapshot $balance_history
+    ): Transaction{
+        $transaction_data->setBalanceHistoryId($balance_history->credit_limit_balance_history_id);
+        $transaction_data->setBalanceHistoryType($balance_history->credit_limit_balance_history_type);
+        return $this->create_transaction_use_case->handle($transaction_data);
     }
 }

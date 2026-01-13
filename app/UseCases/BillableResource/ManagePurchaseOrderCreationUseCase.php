@@ -2,6 +2,7 @@
 
 namespace App\UseCases\BillableResource;
 
+use App\DataTransferObjects\BillableResource\TransactionsDataDTO;
 use App\DataTransferObjects\Histories\CreateHistoryDTO;
 use App\DataTransferObjects\Installment\CreateInstallmentDTO;
 use App\DataTransferObjects\InstallmentHistory\CreateInstallmentHistoryDTO;
@@ -15,12 +16,14 @@ use App\Domain\Contracts\BillableResource\BillableResourceInterface;
 use App\Domain\Mappers\ContractIdMapper;
 use App\Domain\Mappers\UserIdMapper;
 use App\Domain\ValueObjects\AmountInCents;
+use App\Domain\ValueObjects\CreditLimitBalanceSnapshot;
 use App\Domain\ValueObjects\Date;
 use App\Enums\ActionEnum;
 use App\Enums\CreditModalityEnum;
+use App\Enums\CreditPeriodTypeEnum;
 use App\Enums\CreditUsageTypeEnum;
 use App\Enums\ProcessEnum;
-use App\Repositories\CreditLimitBalanceRepository;
+use App\Enums\TransactionTypeEnum;
 use App\UseCases\Histories\CreateHistoryUseCase;
 use App\UseCases\Installment\CreateInstallmentUseCase;
 use App\UseCases\InstallmentHistory\CreateInstallmentHistoryUseCase;
@@ -45,7 +48,6 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
     private CreatePurchaseOrderItemHistoryUseCase $create_purchase_order_item_history_use_case;
     private CreateInstallmentHistoryUseCase $create_installment_history_use_case;
     private CreateTotalMonthlyInstallmentHistoryUseCase $create_total_monthly_installment_history_use_case;
-    private CreditLimitBalanceRepository $credit_limit_balance_repository;
 
     public function __construct(
         CreatePurchaseOrderUseCase $create_purchase_order_use_case,
@@ -56,8 +58,7 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
         CreatePurchaseOrderHistoryUseCase $create_purchase_order_history_use_case,
         CreatePurchaseOrderItemHistoryUseCase $create_purchase_order_item_history_use_case,
         CreateInstallmentHistoryUseCase $create_installment_history_use_case,
-        CreateTotalMonthlyInstallmentHistoryUseCase $create_total_monthly_installment_history_use_case,
-        CreditLimitBalanceRepository $credit_limit_balance_repository
+        CreateTotalMonthlyInstallmentHistoryUseCase $create_total_monthly_installment_history_use_case
     ){
         $this->create_purchase_order_use_case = $create_purchase_order_use_case;
         $this->create_purchase_order_item_use_case = $create_purchase_order_item_use_case;
@@ -68,7 +69,29 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
         $this->create_purchase_order_item_history_use_case = $create_purchase_order_item_history_use_case;
         $this->create_installment_history_use_case = $create_installment_history_use_case;
         $this->create_total_monthly_installment_history_use_case = $create_total_monthly_installment_history_use_case;
-        $this->credit_limit_balance_repository = $credit_limit_balance_repository;
+    }
+
+    public function getCreditUsageTypeId(): int{
+        return CreditUsageTypeEnum::SUPPLY->value;
+    }
+
+    public function getCreditModalityId(): int{
+        return CreditModalityEnum::ACQUISITION->value;
+    }
+
+    public function getCreditPeriodTypeId(): int
+    {
+        return CreditPeriodTypeEnum::MONTHLY->value;
+    }
+
+    public function getAcquisitionCreditLimitBalanceSnapshot(): CreditLimitBalanceSnapshot
+    {
+        return $this->dto->getAcquisitionCreditLimitBalanceSnapshot();
+    }
+
+    public function getPaymentCreditLimitBalanceSnapshot(): CreditLimitBalanceSnapshot
+    {
+        return $this->dto->getPaymentCreditLimitBalanceSnapshot();
     }
 
     public function getActionDate(): Date{
@@ -96,20 +119,18 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
         return UserIdMapper::fromUserMasterCod($this->dto->getPurchaseOrderData()['user_master_cod']);
     }
 
-    public function execute(): void
+    public function execute(): TransactionsDataDTO
     {
         $context = $this->resolveContext();
 
         $history_id = $this->createHistory($context);
 
-        $credit_limit_balance = $this->getCreditLimitBalance($context);
-
         $purchase_order = $this->createPurchaseOrder();
-
+        
         $this->createPurchaseOrderHistory(
             $purchase_order,
             $history_id,
-            $credit_limit_balance
+            $this->dto->getAcquisitionCreditLimitBalanceSnapshot()->credit_limit_id
         );
 
         $purchase_order_items = $this->createPurchaseOrderItems(
@@ -136,6 +157,19 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
         $this->createTotalMonthlyInstallmentHistory(
             $total_monthly_installment,
             $history_id
+        );
+
+        return new TransactionsDataDTO(
+            $purchase_order->total,
+            TransactionTypeEnum::ACQUISITION->value,
+            Date::fromCarbon(Carbon::now()),
+            $this->getUserId(),
+            $this->getContractId(),
+            $this->dto->getAcquisitionCreditLimitBalanceSnapshot()->credit_limit_id,
+            $this->dto->getAcquisitionCreditLimitBalanceSnapshot()->credit_limit_balance_id,
+            null,
+            $purchase_order->getMorphClass(),
+            $purchase_order->id
         );
     }
 
@@ -166,17 +200,6 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
         )->id;
     }
 
-    private function getCreditLimitBalance(array $context)
-    {
-        return $this->credit_limit_balance_repository->getCreditLimitBalanceToCheck(
-            $context['month'],
-            $context['year'],
-            $context['contract_id'],
-            CreditUsageTypeEnum::SUPPLY->value,
-            CreditModalityEnum::ACQUISITION->value
-        );
-    }
-
     private function createPurchaseOrder()
     {
         return $this->create_purchase_order_use_case->handle($this->dto);
@@ -185,13 +208,13 @@ class ManagePurchaseOrderCreationUseCase implements BillableResourceInterface{
     private function createPurchaseOrderHistory(
         $purchase_order,
         int $history_id,
-        $credit_limit_balance
+        int $credit_limit_id
     ): void {
         $this->create_purchase_order_history_use_case->handle(
             new CreatePurchaseOrderHistoryDTO(
                 $purchase_order,
                 $history_id,
-                $credit_limit_balance
+                $credit_limit_id
             )
         );
     }

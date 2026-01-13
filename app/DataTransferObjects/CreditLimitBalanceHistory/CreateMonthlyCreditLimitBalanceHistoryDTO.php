@@ -5,14 +5,14 @@ namespace App\DataTransferObjects\CreditLimitBalanceHistory;
 use App\Domain\ValueObjects\AmountInCents;
 use Carbon\Carbon;
 
-class CreateCreditLimitBalanceHistoryDTO {
+class CreateMonthlyCreditLimitBalanceHistoryDTO {
     private Carbon $date;
     private AmountInCents $used_amount;
     private AmountInCents $old_used_amount;
     private AmountInCents $new_used_amount;
     private AmountInCents $old_balance;
     private AmountInCents $new_balance;
-    private int $credit_limit_balance_id;
+    private int $monthly_credit_limit_balance_id;
     private int $history_id;
     private int $contract_id;
 
@@ -23,7 +23,7 @@ class CreateCreditLimitBalanceHistoryDTO {
         AmountInCents $new_used_amount,
         AmountInCents $old_balance,
         AmountInCents $new_balance,
-        int $credit_limit_balance_id,
+        int $monthly_credit_limit_balance_id,
         int $history_id,
         int $contract_id
     ){
@@ -33,7 +33,7 @@ class CreateCreditLimitBalanceHistoryDTO {
         $this->new_used_amount = $new_used_amount;
         $this->old_balance = $old_balance;
         $this->new_balance = $new_balance;
-        $this->credit_limit_balance_id = $credit_limit_balance_id;
+        $this->monthly_credit_limit_balance_id = $monthly_credit_limit_balance_id;
         $this->history_id = $history_id;
         $this->contract_id = $contract_id;
     }
@@ -70,7 +70,7 @@ class CreateCreditLimitBalanceHistoryDTO {
 
     public function getCreditLimitBalanceId(): int
     {
-        return $this->credit_limit_balance_id;
+        return $this->monthly_credit_limit_balance_id;
     }
 
     public function getHistoryId(): int

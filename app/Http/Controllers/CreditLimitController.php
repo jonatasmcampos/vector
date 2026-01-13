@@ -11,19 +11,20 @@ use App\Helpers\Post;
 use App\Http\Requests\CreditLimits\CreateCreditLimitFormRequest;
 use App\UseCases\CreditLimits\CreateCreditLimitFactory;
 use App\UseCases\CreditLimits\GetCreditLimitsList;
+use App\UseCases\CreditLimits\ManageCreditLimitCreationUseCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CreditLimitController extends Controller
 {
-    private CreateCreditLimitFactory $create_credit_limit_factory;
+    private ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case;
     private GetCreditLimitsList $get_credit_limits_list;
 
     public function __construct(
-        CreateCreditLimitFactory $create_credit_limit_factory,
+        ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case,
         GetCreditLimitsList $get_credit_limits_list
     ){
-        $this->create_credit_limit_factory = $create_credit_limit_factory;
+        $this->manage_credit_limit_creation_use_case = $manage_credit_limit_creation_use_case;
         $this->get_credit_limits_list = $get_credit_limits_list;
     }
 
@@ -45,8 +46,7 @@ class CreditLimitController extends Controller
         $params = Post::anti_injection_array($request->all());
         $create_credit_limit_request = new CreateCreditLimitDTO($params, session('user.id'));
         DB::transaction(function() use ($create_credit_limit_request){
-            $strategy = $this->create_credit_limit_factory->make($create_credit_limit_request->getCreditPeriodTypeId());
-            $strategy->execute($create_credit_limit_request);
+            $this->manage_credit_limit_creation_use_case->handle($create_credit_limit_request);
         });
         return response()->json([
             'success' => true,

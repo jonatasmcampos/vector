@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\UseCases\CreditLimitBalances\GetCreditLimitBalanceFactory;
+use App\UseCases\CreditLimitBalances\GetMonthlyCreditLimitBalanceStrategy;
+use App\UseCases\CreditLimitBalances\UpdateCreditLimitBalanceFactory;
+use App\UseCases\CreditLimitBalances\UpdateMonthlyCreditLimitBalanceStrategy;
 use App\UseCases\CreditLimits\CreateCreditLimitFactory;
 use App\UseCases\CreditLimits\CreateCreditLimitMonthlyStrategy;
 use App\UseCases\Home\GetDataToDashboardFactory;
@@ -24,6 +28,18 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(GetDataToDashboardFactory::class, function ($app) {
             return new GetDataToDashboardFactory([
                 $app->make(LoadDatatoStatisticsCardsUseCase::class),
+            ]);
+        });
+
+        $this->app->singleton(GetCreditLimitBalanceFactory::class, function ($app) {
+            return new GetCreditLimitBalanceFactory([
+                $app->make(GetMonthlyCreditLimitBalanceStrategy::class),
+            ]);
+        });
+
+        $this->app->singleton(UpdateCreditLimitBalanceFactory::class, function ($app) {
+            return new UpdateCreditLimitBalanceFactory([
+                $app->make(UpdateMonthlyCreditLimitBalanceStrategy::class),
             ]);
         });
     }

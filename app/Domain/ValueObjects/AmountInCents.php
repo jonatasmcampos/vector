@@ -2,7 +2,7 @@
 
 namespace App\Domain\ValueObjects;
 
-class AmountInCents{
+final class AmountInCents{
     
     private int $amount;
 

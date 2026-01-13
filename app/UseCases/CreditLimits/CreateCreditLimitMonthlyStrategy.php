@@ -2,8 +2,8 @@
 
 namespace App\UseCases\CreditLimits;
 
-use App\DataTransferObjects\CreditLimitBalance\CreateCreditLimitBalanceDTO;
-use App\DataTransferObjects\CreditLimitBalanceHistory\CreateCreditLimitBalanceHistoryDTO;
+use App\DataTransferObjects\CreditLimitBalance\CreateMonthlyCreditLimitBalanceDTO;
+use App\DataTransferObjects\CreditLimitBalanceHistory\CreateMonthlyCreditLimitBalanceHistoryDTO;
 use App\DataTransferObjects\CreditLimitHistory\CreateCreditLimitHistoryDTO;
 use App\DataTransferObjects\CreditLimits\CreateCreditLimitDTO;
 use App\DataTransferObjects\Histories\CreateHistoryDTO;
@@ -13,10 +13,10 @@ use App\Enums\ActionEnum;
 use App\Enums\CreditPeriodTypeEnum;
 use App\Enums\ProcessEnum;
 use App\Models\CreditLimit;
-use App\Models\CreditLimitBalance;
+use App\Models\MonthlyCreditLimitBalance;
 use App\Models\History;
-use App\UseCases\CreditLimitBalanceHistories\CreateCreditLimitBalanceHistoryUseCase;
-use App\UseCases\CreditLimitBalances\CreateCreditLimitBalanceUseCase;
+use App\UseCases\CreditLimitBalanceHistories\Monthly\CreateMonthlyCreditLimitBalanceHistoryUseCase;
+use App\UseCases\CreditLimitBalances\Monthly\CreateMonthlyCreditLimitBalanceUseCase;
 use App\UseCases\CreditLimitHistories\CreateCreditLimitHistoryUseCase;
 use App\UseCases\Histories\CreateHistoryUseCase;
 use Carbon\Carbon;
@@ -24,22 +24,22 @@ use Carbon\Carbon;
 class CreateCreditLimitMonthlyStrategy implements CreateCreditLimitInterface{
 
     private CreateCreditLimitUseCase $create_credit_limit_use_case;
-    private CreateCreditLimitBalanceUseCase $create_credit_limit_balance_use_case;
+    private CreateMonthlyCreditLimitBalanceUseCase $create_monthly_credit_limit_balance_use_case;
 
     private CreateHistoryUseCase $create_history_use_case;
     private CreateCreditLimitHistoryUseCase $create_credit_limit_history_use_case;
-    private CreateCreditLimitBalanceHistoryUseCase $create_credit_limit_balance_history_use_case;
+    private CreateMonthlyCreditLimitBalanceHistoryUseCase $create_credit_limit_balance_history_use_case;
 
     public function __construct(
         CreateCreditLimitUseCase $create_credit_limit_use_case,
-        CreateCreditLimitBalanceUseCase $create_credit_limit_balance_use_case,
+        CreateMonthlyCreditLimitBalanceUseCase $create_monthly_credit_limit_balance_use_case,
         CreateHistoryUseCase $create_history_use_case,
         CreateCreditLimitHistoryUseCase $create_credit_limit_history_use_case,
-        CreateCreditLimitBalanceHistoryUseCase $create_credit_limit_balance_history_use_case
+        CreateMonthlyCreditLimitBalanceHistoryUseCase $create_credit_limit_balance_history_use_case
 
     ){
         $this->create_credit_limit_use_case = $create_credit_limit_use_case;
-        $this->create_credit_limit_balance_use_case = $create_credit_limit_balance_use_case;
+        $this->create_monthly_credit_limit_balance_use_case = $create_monthly_credit_limit_balance_use_case;
         $this->create_history_use_case = $create_history_use_case;
         $this->create_credit_limit_history_use_case = $create_credit_limit_history_use_case;
         $this->create_credit_limit_balance_history_use_case = $create_credit_limit_balance_history_use_case;
@@ -75,9 +75,9 @@ class CreateCreditLimitMonthlyStrategy implements CreateCreditLimitInterface{
         return $this->create_credit_limit_use_case->handle($create_credit_limit_dto);
     }
 
-    private function createBalanceForCreditLimit(CreditLimit $credit_limit): CreditLimitBalance{
-        return $this->create_credit_limit_balance_use_case->handle(
-            new CreateCreditLimitBalanceDTO(
+    private function createBalanceForCreditLimit(CreditLimit $credit_limit): MonthlyCreditLimitBalance{
+        return $this->create_monthly_credit_limit_balance_use_case->handle(
+            new CreateMonthlyCreditLimitBalanceDTO(
                 AmountInCents::fromInteger(0),
                 AmountInCents::fromInteger($credit_limit->authorized_amount),
                 $credit_limit->contract_id,
@@ -116,9 +116,9 @@ class CreateCreditLimitMonthlyStrategy implements CreateCreditLimitInterface{
         );
     }
 
-    private function createCreditLimiBalancetHistory(CreditLimitBalance $credit_limit_balance, int $history_id){
+    private function createCreditLimiBalancetHistory(MonthlyCreditLimitBalance $credit_limit_balance, int $history_id){
         $this->create_credit_limit_balance_history_use_case->handle(
-            new CreateCreditLimitBalanceHistoryDTO(
+            new CreateMonthlyCreditLimitBalanceHistoryDTO(
                 Carbon::now(),
                 AmountInCents::fromInteger($credit_limit_balance->total_used_amount),
                 AmountInCents::fromInteger(0),

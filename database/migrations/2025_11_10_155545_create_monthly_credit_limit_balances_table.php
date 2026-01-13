@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('credit_limit_balances', function (Blueprint $table) {
+        Schema::create('monthly_credit_limit_balances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('total_used_amount');
             $table->bigInteger('balance');
             $table->unsignedBigInteger('credit_limit_id');
             $table->unsignedBigInteger('contract_id');
-            $table->boolean('active')->default(true);
             $table->timestamps();
 
             $table->foreign('contract_id')

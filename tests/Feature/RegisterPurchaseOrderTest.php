@@ -17,7 +17,7 @@ class RegisterPurchaseOrderTest extends TestCase
         $payload = [
             "header" => [
                 "payload_type" => "ordem_de_compra",
-                "action_date" => "2025-12-01T12:23:38.000000Z"
+                "action_date" => "2026-01-01T12:23:38.000000Z"
             ],
             "payload" => [
                 "purchase_order" => [
@@ -36,7 +36,7 @@ class RegisterPurchaseOrderTest extends TestCase
                     "payment_nature_id" => "2",
                     "payment_method_id" => "2",
                     "installment_quantity" => "3",
-                    "created_at" => "2025-12-01T12:23:38.000000Z"
+                    "created_at" => "2026-01-01T12:23:38.000000Z"
                 ],
                 "materials" => [
                     [

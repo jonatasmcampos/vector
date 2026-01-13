@@ -2,23 +2,22 @@
 
 namespace App\DataTransferObjects\PurchaseOrderHistory;
 
-use App\Models\CreditLimitBalance;
 use App\Models\PurchaseOrder;
 
 class CreatePurchaseOrderHistoryDTO
 {
     private PurchaseOrder $purchase_order;
     private int $history_id;
-    private CreditLimitBalance $credit_limit_balance;
+    private int $credit_limit_id;
 
     public function __construct(
         PurchaseOrder $purchase_order,
         int $history_id,
-        CreditLimitBalance $credit_limit_balance
+        int $credit_limit_id
     ) {
         $this->purchase_order = $purchase_order;
         $this->history_id = $history_id;
-        $this->credit_limit_balance = $credit_limit_balance;
+        $this->credit_limit_id = $credit_limit_id;
     }
 
     public function getPurchaseOrder(): PurchaseOrder
@@ -31,8 +30,8 @@ class CreatePurchaseOrderHistoryDTO
         return $this->history_id;
     }
 
-    public function getCreditLimitBalance(): CreditLimitBalance
+    public function getCreditLimitId(): int
     {
-        return $this->credit_limit_balance;
+        return $this->credit_limit_id;
     }
 }

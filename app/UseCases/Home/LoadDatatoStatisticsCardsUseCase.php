@@ -50,8 +50,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
                 $data[] = [
                     'title' => 'Saldo de compras',
                     'subtitle' => 'Valor disponível para novas compras',
-                    'value' => AmountInCents::fromInteger($credit_limit->credit_limit_balance->balance)->toBRLMoney()->toString(),
-                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->credit_limit_balance->balance),
+                    'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
+                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
                 ];
             }
             if($credit_limit->isPaymentModality()){
@@ -64,8 +64,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
                 $data[] =  [
                     'title' => 'Saldo de pagamentos',
                     'subtitle' => 'Valor disponível para novos pagamentos',
-                    'value' => AmountInCents::fromInteger($credit_limit->credit_limit_balance->balance)->toBRLMoney()->toString(),
-                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->credit_limit_balance->balance),
+                    'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
+                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
                 ];
             }
         }        
@@ -78,7 +78,7 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
         int $contract_id,
         int $credit_usage_type_id
     ): Collection{
-        return $this->credit_limit_repository->getByMonthYearAndContractId($month, $year, $contract_id, $credit_usage_type_id);
+        return $this->credit_limit_repository->getByMonthYearContractIdAndUsageTypeId($month, $year, $contract_id, $credit_usage_type_id);
     }
     
 }
