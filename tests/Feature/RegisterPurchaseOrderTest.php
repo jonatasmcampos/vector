@@ -83,7 +83,7 @@ class RegisterPurchaseOrderTest extends TestCase
                 ]
             ]
         ];
-        $response = $this->postJson(env('APP_URL').'/api/purchase_order/store', $payload);
+        $response = $this->postJson(env('APP_URL').'/api/purchase-order/store', $payload);
         dd($response->json());
         $response->assertStatus(200);
     }

@@ -45,7 +45,7 @@ enum ProcessEnum: int
                 'id' => self::EXTERNAL_PURCHASE_ORDER_CREATION->value,
                 'name' => 'Listagem de ordem de compra',
                 'description' => null,
-                'route' => 'config.config.index',
+                'route' => 'purchase-order.index',
                 'order' => 1,
                 'menu' => 'DADOS EXTERNOS',
                 'icon' => 'bi bi-gear',

@@ -10,8 +10,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class GetCreditLimitsList{
 
- public function handle(Request $request)
-    {
+    public function handle(Request $request){
+        
         $params = Post::anti_injection_yajra($request->all());
 
         /**
