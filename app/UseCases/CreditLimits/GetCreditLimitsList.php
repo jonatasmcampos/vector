@@ -5,6 +5,7 @@ namespace App\UseCases\CreditLimits;
 use App\Domain\ValueObjects\AmountInCents;
 use App\Helpers\Post;
 use App\Models\CreditLimit;
+use App\QueryBuilder\YajraQueryBuilder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -13,12 +14,9 @@ class GetCreditLimitsList{
     public function handle(Request $request){
         
         $params = Post::anti_injection_yajra($request->all());
+        $query = new YajraQueryBuilder(CreditLimit::query());
 
-        /**
-         * ✅ Query base com JOIN para permitir ordenação + filtros + busca
-         */
-        $query = CreditLimit::query()
-            ->leftJoin('contracts', 'contracts.id', '=', 'credit_limits.contract_id')
+        $query->leftJoin('contracts', 'contracts.id', '=', 'credit_limits.contract_id')
             ->leftJoin('credit_modalities', 'credit_modalities.id', '=', 'credit_limits.credit_modality_id')
             ->leftJoin('credit_usage_types', 'credit_usage_types.id', '=', 'credit_limits.credit_usage_type_id')
             ->leftJoin('credit_period_types', 'credit_period_types.id', '=', 'credit_limits.credit_period_type_id')
@@ -30,98 +28,62 @@ class GetCreditLimitsList{
                 'credit_period_types.name as period_name',
             ]);
 
-        /**
-         * ✅ FILTRO MANUAL FIXO (opcional)
-         */
-        if ($params->credit_period_type_id) {
-            $query->where('credit_limits.credit_period_type_id', $params->credit_period_type_id);
+        return $query->rejectColumns(['month', 'authorized_amount'])
+            ->specifySearches([
+                'month' => fn ($query, $search) => $this->specifyReferenceMonthSearch($query, $search),
+                'authorized_amount' => fn ($query, $search) => $this->specifyAuthorizedAmountSearch($query, $search),
+            ])
+            ->apply($params->getAttributes())
+            ->toDataTable(
+                rawColumns: ['action'],
+                callback: function($credit_limit) {
+                    return $credit_limit->addColumn('contract.name', fn($credit_limit) => $credit_limit->contract_name)
+                        ->addColumn('authorized_amount', fn($credit_limit) => 'R$ '.AmountInCents::fromInteger($credit_limit->authorized_amount)->toBRLMoney()->toString())
+                        ->addColumn('month', fn($credit_limit) => getMonth($credit_limit->month).'/'.$credit_limit->year)
+                        ->addColumn('credit_modality.name', fn($credit_limit) => $credit_limit->modality_name)
+                        ->addColumn('credit_usage_type.name', fn($credit_limit) => $credit_limit->usage_name)
+                        ->addColumn('credit_period_type.name', fn($credit_limit) => $credit_limit->period_name)
+                        ->addColumn('action', function ($credit_limit) {
+                            return '<a href="#" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>';
+                        });
+                }
+            );
+    }
+
+    private function specifyReferenceMonthSearch($query, $search)
+    {
+        $month = '';
+        $year  = '';
+
+        for ($i = 0; $i < mb_strlen($search); $i++) {
+            $char = mb_substr($search, $i, 1);
+
+            if (preg_match('/\p{L}/u', $char)) {
+                $month .= $char;
+            }
+
+            if (preg_match('/\p{N}/u', $char)) {
+                $year .= $char;
+            }
         }
 
-        /**
-         * ✅ Agora iniciamos o DataTables com suporte a filtros por coluna
-         */
-        return DataTables::of($query)
+        $month = mb_strtolower($month, 'UTF-8');
 
-            /**
-             * ✅ Pesquisa GLOBAL do DataTables
-             */
-            ->filter(function ($q) use ($request) {
-                $search = $request->input('search.value');
+        if ($month !== '') {
+            $monthNumber = getMonthNumber($month);
 
-                if ($search) {
-                    $q->where(function ($sub) use ($search) {
-                        $sub->where('authorized_amount', 'like', "%{$search}%")
-                            ->orWhere('month', 'like', "%{$search}%")
-                            ->orWhere('contracts.name', 'like', "%{$search}%")
-                            ->orWhere('credit_modalities.name', 'like', "%{$search}%")
-                            ->orWhere('credit_usage_types.name', 'like', "%{$search}%")
-                            ->orWhere('credit_period_types.name', 'like', "%{$search}%");
-                    });
-                }
+            if ($monthNumber !== null) {
+                $query->where('credit_limits.month', $monthNumber);
+            }
+        }
 
-                /**
-                 * ✅ ✅ Pesquisa por COLUNA INDIVIDUAL (inputs no thead)
-                 */
-                $columns = $request->input('columns', []);
+        if ($year !== '') {
+            $query->where('credit_limits.year', (int) $year);
+        }
+    }
 
-                foreach ($columns as $index => $col) {
-                    $value = $col['search']['value'] ?? null;
-                    $columnName = $col['data'];
-
-                    if (!$value) {
-                        continue;
-                    }
-
-                    switch ($columnName) {
-                        case 'contract.name':
-                            $q->where('contracts.name', 'LIKE', "%{$value}%");
-                            break;
-
-                        case 'authorized_amount':
-                            $q->where('credit_limits.authorized_amount', 'LIKE', "%{$value}%");
-                            break;
-
-                        case 'month':
-                            $q->where('credit_limits.month', 'LIKE', "%{$value}%");
-                            break;
-
-                        case 'credit_modality.name':
-                            $q->where('credit_modalities.name', 'LIKE', "%{$value}%");
-                            break;
-
-                        case 'credit_usage_type.name':
-                            $q->where('credit_usage_types.name', 'LIKE', "%{$value}%");
-                            break;
-
-                        case 'credit_period_type.name':
-                            $q->where('credit_period_types.name', 'LIKE', "%{$value}%");
-                            break;
-
-                        default:
-                            // não faz nada para colunas não pesquisáveis
-                            break;
-                    }
-                }
-            })
-
-            /**
-             * ✅ Mapeamento das colunas relacionadas
-             */
-            ->addColumn('contract.name', fn($row) => $row->contract_name)
-            ->addColumn('authorized_amount', fn($row) => 'R$ '.AmountInCents::fromInteger($row->authorized_amount)->toBRLMoney()->toString())
-            ->addColumn('month', fn($row) => getMonth($row->month).'/'.$row->year)
-            ->addColumn('credit_modality.name', fn($row) => $row->modality_name)
-            ->addColumn('credit_usage_type.name', fn($row) => $row->usage_name)
-            ->addColumn('credit_period_type.name', fn($row) => $row->period_name)
-
-            /**
-             * ✅ Ação (sempre manual)
-             */
-            ->addColumn('action', function ($row) {
-                return '<a href="#" class="btn btn-sm btn-dark"><i class="bi bi-pencil"></i></a>';
-            })
-
-            ->rawColumns(['action'])
-            ->make(true);
+    private function specifyAuthorizedAmountSearch($query, $search){
+        $cents = AmountInCents::fromString($search)->value();
+        $query->where('credit_limits.authorized_amount', $cents);
     }
 }

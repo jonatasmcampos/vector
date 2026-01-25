@@ -10,6 +10,7 @@ class YajraQueryBuilder extends Builder
     private array $rejected_columns;
     private array $columns_and_values;
     private array $date_columns;
+    private array $searchCallbacks;
 
     public function __construct(Builder $query)
     {
@@ -18,6 +19,7 @@ class YajraQueryBuilder extends Builder
         $this->rejected_columns = [];
         $this->columns_and_values = [];
         $this->date_columns = [];
+        $this->searchCallbacks = [];
     }
 
     public function rejectColumns(array $rejected): self{
@@ -34,7 +36,7 @@ class YajraQueryBuilder extends Builder
         return $this;
     }
 
-        private function getColumnsNames(): array{
+    private function getColumnsNames(): array{
         return collect($this->columns_and_values)
             ->filter(fn ($element) => is_array($element) && isset($element['column']))
             ->map(fn($element) => $element['column'])
@@ -59,15 +61,64 @@ class YajraQueryBuilder extends Builder
         return $columns;
     }
 
+    public function specifySearches(array $callbacks): self
+    {
+        $this->searchCallbacks = $callbacks;
+        return $this;
+    }
+
+    protected function hasSearchCallback(string $column): bool {
+        return array_key_exists($column, $this->searchCallbacks);
+    }
+
+    protected function applySearchCallback($query, string $column, string $search): void {
+        ($this->searchCallbacks[$column])($query, $search);
+    }
+
     public function apply(array $params): self
     {
         $this->setColumnsAndValues($params);
+
+        $this->applySpecifiedSearches();
 
         $this->applyGlobalSearch();
 
         $this->applyColumnFilters();
 
         return $this;
+    }
+
+    protected function applySpecifiedSearches(): void
+    {
+        foreach ($this->searchCallbacks as $column => $callback) {
+
+            $column_and_value = collect($this->columns_and_values)
+                ->first(fn ($item) =>
+                    isset($item['column'], $item['value']) &&
+                    $item['column'] === $column &&
+                    $item['value'] !== ''
+                );
+            
+            if (!$column_and_value) {
+                continue;
+            }
+
+            $callback($this, $column_and_value['value']);
+        }
+    }
+
+    protected function applyGlobalSearchCallbacks($query, string $search): void
+    {
+        foreach ($this->searchCallbacks as $column => $callback) {
+
+            if (!in_array($column, $this->rejected_columns, true)) {
+                continue;
+            }
+
+            $query->orWhere(function ($q) use ($callback, $search) {
+                $callback($q, $search);
+            });
+        }
     }
 
     protected function applyGlobalSearch(): void {
@@ -94,7 +145,9 @@ class YajraQueryBuilder extends Builder
                 }
             }
 
-            $this->applyGlobalDateSearch($query);            
+            $this->applyGlobalDateSearch($query);
+            
+            $this->applyGlobalSearchCallbacks($query, $this->columns_and_values['search']);
         });
         
     }
