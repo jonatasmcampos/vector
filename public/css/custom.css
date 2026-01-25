@@ -26,3 +26,9 @@
     transform: rotate(360deg);
   }
 }
+
+table.dataTable td,
+table.dataTable th {
+    text-align: center !important;
+    vertical-align: middle;
+}

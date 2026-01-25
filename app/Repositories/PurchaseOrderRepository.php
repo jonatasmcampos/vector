@@ -40,4 +40,21 @@ class PurchaseOrderRepository{
             'installments_number' => $installments_number,
         ]);
     }
+
+    public function getById(
+        int $purchase_order_id
+    ): ?PurchaseOrder{
+        $purchase_order = PurchaseOrder::with([
+            'user',
+            'supplier',
+            'installments',
+            'purchase_order_items',
+            'status',
+            'contract'
+        ])->find($purchase_order_id);
+        if(!$purchase_order){
+            throw new \Exception("Ordem de compra não encontrada", 404);
+        } 
+        return $purchase_order;
+    }
 }

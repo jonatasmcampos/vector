@@ -23,6 +23,7 @@ Route::middleware(AuthenticatedMiddleware::class)->group(function(){
 
     Route::get('/dados-externos/ordens-de-compra/listagem', [PurchaseOrderController::class, 'index'])->name('purchase-order.index');
     Route::get('/dados-externos/ordens-de-compra/yajra/listagem', [PurchaseOrderController::class, 'list'])->name('purchase-order.list');
+    Route::get('/dados-externos/ordens-de-compra/{ordem_compra_id}', [PurchaseOrderController::class, 'show'])->name('purchase-order.show');
 
     Route::get('/config/config', function(){
         return response()->json('nada ainda');

@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\HtmlString;
+
 enum StatusEnum: int
 {
     case PENDING = 1;
@@ -32,5 +34,14 @@ enum StatusEnum: int
                 'description' => null,
             ]
         ];
+    }
+
+    public static function badge(int $status_id): HtmlString{
+        return new HtmlString (match ($status_id) {
+            1  => '<span class="badge bg-warning"> PENDENTE     </span>',
+            2  => '<span class="badge bg-success"> CONFIRMADO   </span>',
+            3  => '<span class="badge bg-success"> PAGO         </span>',
+            4  => '<span class="badge bg-danger">  CANCELADO    </span>',
+        });
     }
 }

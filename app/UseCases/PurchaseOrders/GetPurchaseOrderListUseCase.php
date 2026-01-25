@@ -31,7 +31,7 @@ class GetPurchaseOrderListUseCase{
 
     private function getButtons(PurchaseOrder $purchase_order){
         return '
-            <a class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></a>
+            <a href="'. route('purchase-order.show', $purchase_order->id) .'" class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></a>
         ';
     }
 }

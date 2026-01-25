@@ -10,6 +10,7 @@ use App\Enums\CreditModalityEnum;
 use App\Enums\CreditUsageTypeEnum;
 use App\Helpers\Post;
 use App\Http\Requests\PurchaseOrders\CreatePurchaseOrderFormRequest;
+use App\Repositories\PurchaseOrderRepository;
 use App\UseCases\BillableResource\ManageBillableResourceUseCase;
 use App\UseCases\BillableResource\ManagePurchaseOrderCreationUseCase;
 use App\UseCases\CreditLimitBalances\GetCreditLimitBalanceUseCase;
@@ -24,17 +25,20 @@ class PurchaseOrderController extends Controller
     private ManagePurchaseOrderCreationUseCase $manage_purchase_order_creation_use_case;
     private GetCreditLimitBalanceUseCase $get_credit_limit_balance_use_case;
     private GetPurchaseOrderListUseCase $get_purchase_order_list_use_case;
+    private PurchaseOrderRepository $purchase_order_repository;
 
     public function __construct(    
         ManageBillableResourceUseCase $manage_billable_resource_use_case,
         ManagePurchaseOrderCreationUseCase $manage_purchase_order_creation_use_case,
         GetCreditLimitBalanceUseCase $get_credit_limit_balance_use_case,
-        GetPurchaseOrderListUseCase $get_purchase_order_list_use_case
+        GetPurchaseOrderListUseCase $get_purchase_order_list_use_case,
+        PurchaseOrderRepository $purchase_order_repository
     ){
         $this->manage_billable_resource_use_case = $manage_billable_resource_use_case;
         $this->manage_purchase_order_creation_use_case = $manage_purchase_order_creation_use_case;
         $this->get_credit_limit_balance_use_case = $get_credit_limit_balance_use_case;
         $this->get_purchase_order_list_use_case = $get_purchase_order_list_use_case;
+        $this->purchase_order_repository = $purchase_order_repository;
     }
 
     public function index(){
@@ -86,6 +90,13 @@ class PurchaseOrderController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Ordem de compra cadastrada com sucesso!'
+        ]);
+    }
+
+    public function show(Request $request, int $purchase_order_id){
+        $purchase_order = $this->purchase_order_repository->getById($purchase_order_id);
+        return view('purchaseOrder.show', [
+            'purchase_order' => $purchase_order
         ]);
     }
 }
