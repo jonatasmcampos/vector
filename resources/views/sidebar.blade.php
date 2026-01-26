@@ -94,7 +94,7 @@
                 <div class="sidebar-section-title">{{$menu}}</div>
                 @foreach ($permissions as $permission)
                     <a href="{{ route($permission['route']) }}"
-                        class="option @if(Request::segment(1) == $permission["process"]) active @endif">
+                        class="option @if(Request::segment(1) == $permission["process"] || Request::segment(2) == $permission["process"]) active @endif">
                         <i class="{{$permission['icon']}}"></i> {{$permission['name']}}
                     </a>
                 @endforeach

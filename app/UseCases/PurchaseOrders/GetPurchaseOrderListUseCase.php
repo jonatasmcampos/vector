@@ -2,6 +2,7 @@
 
 namespace App\UseCases\PurchaseOrders;
 
+use App\Enums\StatusEnum;
 use App\Helpers\Post;
 use App\Models\PurchaseOrder;
 use App\QueryBuilder\YajraQueryBuilder;
@@ -19,7 +20,7 @@ class GetPurchaseOrderListUseCase{
                 rawColumns: ['action'],
                 callback: function ($purchase_order) {
                     return $purchase_order->addColumn('external_display_id', fn ($purchase_order) => $purchase_order->external_display_id)
-                        ->addColumn('status.name', fn ($purchase_order) => $purchase_order->status->name)
+                        ->addColumn('status.name', fn ($purchase_order) => StatusEnum::badge($purchase_order->status_id))
                         ->addColumn('total_items', fn ($purchase_order) => $purchase_order->total_items)
                         ->addColumn('supplier.name', fn ($purchase_order) => $purchase_order->supplier->name)
                         ->addColumn('created_at', fn ($purchase_order) => $purchase_order->created_at->format('d/m/Y'))

@@ -8,6 +8,7 @@ enum ProcessEnum: int
     case MANAGE_LIMIT = 2;
     case SETTINGS = 3;
     case EXTERNAL_PURCHASE_ORDER_CREATION = 4;
+    case TRANSACTIONS = 5;
 
     public static function getDataToInsert(): array{
         return [
@@ -28,7 +29,7 @@ enum ProcessEnum: int
                 'route' => 'manage.limits.index',
                 'order' => 1,
                 'menu' => 'GERENCIAR',
-                'icon' => 'bi bi-coin',
+                'icon' => 'bi bi-graph-up',
                 'process' => 'limites'
             ],
             [
@@ -43,13 +44,23 @@ enum ProcessEnum: int
             ],
             [
                 'id' => self::EXTERNAL_PURCHASE_ORDER_CREATION->value,
-                'name' => 'Listagem de ordem de compra',
+                'name' => 'Ordens de compra',
                 'description' => null,
                 'route' => 'purchase-order.index',
                 'order' => 1,
                 'menu' => 'DADOS EXTERNOS',
-                'icon' => 'bi bi-gear',
-                'process' => 'purchase_order'
+                'icon' => 'bi bi-receipt',
+                'process' => 'ordens-de-compra'
+            ],
+            [
+                'id' => self::TRANSACTIONS->value,
+                'name' => 'Transações',
+                'description' => null,
+                'route' => 'transaction.index',
+                'order' => 2,
+                'menu' => 'DADOS EXTERNOS',
+                'icon' => 'bi bi-cash-stack',
+                'process' => 'transacoes'
             ],
         ];
     }

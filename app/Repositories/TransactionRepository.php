@@ -34,4 +34,8 @@ class TransactionRepository{
             'balance_history_id'        => $balance_history_id
         ]);
     }
+
+    public function getAll(){
+        return Transaction::with(['transaction_entity', 'balance_history', 'contract', 'user', 'transaction_type'])->get();
+    }
 }
