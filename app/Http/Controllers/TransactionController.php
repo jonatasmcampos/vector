@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\TransactionRepository;
+use App\UseCases\Transaction\GetTransactionListViewUseCase;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    private TransactionRepository $transaction_repository;
+    private GetTransactionListViewUseCase $get_transaction_list_view_use_case;
 
     public function __construct(
-        TransactionRepository $transaction_repository
+        GetTransactionListViewUseCase $get_transaction_list_view_use_case
     ){
-        $this->transaction_repository = $transaction_repository;
+        $this->get_transaction_list_view_use_case = $get_transaction_list_view_use_case;
     }
 
     public function index(){
-        $transactions = $this->transaction_repository->getAll();
+        $transactions = $this->get_transaction_list_view_use_case->handle();
         return view('transaction.index', [
             'transactions' => $transactions
         ]);

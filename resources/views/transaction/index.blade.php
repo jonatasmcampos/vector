@@ -16,69 +16,66 @@
 <section class="mb-4">
     <div class="card shadow-sm border-0">
         <div class="card-body">
+
             @forelse ($transactions as $transaction)
                 <div class="mb-4">
-                    <div class="card border-0 shadow-sm mb-2">
-                        
+                    <div class="card border-0 shadow-sm mb-2">                        
                         <div class="py-2 px-3">
                             <div class="d-flex justify-content-between">
-                                <small class="text-muted fw-semibold">{{$transaction->date->format('d/m/Y h:m:s')}}</small>
-                                <div class="d-flex align-items-center text-muted">
-                                    Usuário: &nbsp; <h5 class="mb-0 fw-semibold">{{$transaction->user->name}}</h5>
+                                <small class="text-muted fw-semibold">{{$transaction->datetime}}</small>
+                                <div class="d-flex align-items-center text-muted small">
+                                    Usuário: &nbsp; {{$transaction->user}}
                                 </div>
                             </div>
-                            <hr class="mt-2 mb-4">
+                            <hr class="mt-1 mb-0">
                         </div>
                         <div class="card-body d-flex justify-content-between">
-                            <div class="d-flex gap-3">
-                                @if($transaction->transaction_type_id == App\Enums\TransactionTypeEnum::ACQUISITION->value)
-                                    <div class="text-danger fs-4">
-                                        <i class="bi bi-arrow-down-circle"></i>
-                                    </div>
-                                @endif
+                            <div class="d-flex gap-2">
+                                <div class="{{$transaction->text_class}} fs-4">
+                                    <i class="{{$transaction->icon}}"></i>
+                                </div>
 
                                 <div>
                                     <div class="fw-semibold text-danger">
-                                        {{$transaction->transaction_type->name}}
+                                        {{$transaction->transaction_type}}
                                     </div>                                    
 
                                     <div class="small">
-                                        {{$transaction->contract->name}}
+                                        {{$transaction->contract}}
                                     </div>
 
                                     <div class="small">
-                                        @if($transaction->transaction_entity_type == 'App\Models\PurchaseOrder')
-                                            Ordem de compra #{{$transaction->transaction_entity->external_display_id}}
+                                            {{$transaction->transaction_entity}}
                                             <br>
-                                            {{$transaction->transaction_entity->payment_method->name}}
+                                            {{$transaction->payment_method}}
                                             |
-                                            {{$transaction->transaction_entity->payment_nature->name}}
+                                            {{$transaction->payment_nature}}
                                             |
-                                            {{$transaction->transaction_entity->installments_number}}x
-                                        @endif
+                                            {{$transaction->installments_number}}x
                                     </div>
                                 </div>
                             </div>
 
                             <div class="text-end">
-                                 @if($transaction->transaction_type_id == App\Enums\TransactionTypeEnum::ACQUISITION->value)
-                                    <div class="fw-bold text-danger fs-5">
-                                        R${{App\Domain\ValueObjects\AmountInCents::fromInteger($transaction->amount)->toBRLMoney()->toString()}}
-                                    </div>
-                                @endif
+                                <div class="fw-bold {{$transaction->text_class}} fs-5">
+                                    R$ {{$transaction->amount}}
+                                </div>
 
                                 <div class="text-muted small">
-                                    Saldo: R${{App\Domain\ValueObjects\AmountInCents::fromInteger($transaction->balance_history->old_balance)->toBRLMoney()->toString()}} 
+                                    Saldo: R${{$transaction->old_balance}} 
                                     <i class="bi bi-chevron-compact-right"></i> 
-                                    R${{App\Domain\ValueObjects\AmountInCents::fromInteger($transaction->balance_history->new_balance)->toBRLMoney()->toString()}}
+                                    R${{$transaction->new_balance}}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
-                <span class="badge badge-info">Nenhuma transação realizada!</span>
+            <div class="text-center">
+                <span class="text-center badge bg-info w-100 py-2">Nenhuma transação realizada!</span>
+            </div>
             @endforelse
+
         </div>
     </div>
 </section>
