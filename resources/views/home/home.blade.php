@@ -61,12 +61,12 @@
     </style>
 
     <section class="row mb-4 align-items-center">
-        <div class="col-12 col-xl-8 mb-3 mb-xl-0">
+        <div class="col-12 col-xl-6 mb-3 mb-xl-0">
             <h2 class="fw-bold mb-0">Dashboard</h2>
         </div>
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-xl-6">
             <div class="row">
-                <div class="col-12 col-xl-4 mb-3 mb-xl-0">
+                <div class="col-12 col-xl-3 mb-3 mb-xl-0">
                     <label for="select_contract">Contrato</label>
                     <select class="form-select me-2" name="contract_id" id="select_contract">
                         @foreach ($contracts as $index => $contract)
@@ -74,7 +74,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-12 col-xl-4 mb-3 mb-xl-0">
+                <div class="col-12 col-xl-3 mb-3 mb-xl-0">
                     <label for="select_reference_month">Mês de referência</label>
                     <select class="form-select" name="month" id="select_reference_month">
                         @foreach ($months as $index => $month)
@@ -82,11 +82,19 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-12 col-xl-4 mb-3 mb-xl-0">
+                <div class="col-12 col-xl-3 mb-3 mb-xl-0">
                     <label for="select_reference_year">Ano de referência</label>
                     <select class="form-select" name="year" id="select_reference_year">
                         @foreach ($years as $index => $year)
                             <option value="{{$year}}" @if($current_year == $year) selected @endif>{{$year}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-xl-3 mb-3 mb-xl-0">
+                    <label for="select_usage_type">Tipo de uso</label>
+                    <select class="form-select me-2" name="credit_usage_type_id" id="select_usage_type">
+                        @foreach ($credit_usage_types as $credit_usage_type_id => $credit_usage_type)
+                            <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -102,18 +110,19 @@
         <script>
             $(document).ready(function(){
                 loadCards();
-                $('#select_reference_month, #select_reference_year, #select_contract').on('change', loadCards);
+                $('#select_reference_month, #select_reference_year, #select_contract, #select_usage_type').on('change', loadCards);
             });
 
             async function loadCards(){
                 const MONTH = $('#select_reference_month').val();
                 const YEAR = $('#select_reference_year').val();
                 const CONTRACT_ID = $('#select_contract').val();
+                const CREDIT_USAGE_TYPE_ID = $('#select_usage_type').val();
 
                 await $.ajax({
                     url: @json(route('view.home.load.cards')),
                     method: 'GET',
-                    data: { month: MONTH, year: YEAR, contract_id: CONTRACT_ID },
+                    data: { month: MONTH, year: YEAR, contract_id: CONTRACT_ID, credit_usage_type_id: CREDIT_USAGE_TYPE_ID },
                     beforeSend: function() {
                         $('#cards-container').html('<div class="text-center py-4 w-100"><div class="spinner-border text-warning" role="status"></div></div>');
                     },

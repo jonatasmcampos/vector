@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\DataTransferObjects\Home\GetDataToDashboardDTO;
 use App\Enums\ContractEnum;
+use App\Enums\CreditUsageTypeEnum;
 use App\Helpers\Post;
+use App\Models\CreditUsageType;
 use App\UseCases\Home\GetDataToDashboardFactory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +31,8 @@ class HomeController extends Controller
             'years' => getYears(),
             'contracts' => ContractEnum::getAll(false),
             'current_month' => Carbon::now()->format('m'),
-            'current_year' => Carbon::now()->format('Y')
+            'current_year' => Carbon::now()->format('Y'),
+            'credit_usage_types' => CreditUsageTypeEnum::getAll()
         ]);
     }
 
@@ -39,6 +42,7 @@ class HomeController extends Controller
             $params->month,
             $params->year,
             $params->contract_id,
+            $params->credit_usage_type_id
         );
         $use_case = $this->get_data_to_dashboard_factory->make('data-cards');
         return response()->json($use_case->load($get_data_to_dashboard_dto));

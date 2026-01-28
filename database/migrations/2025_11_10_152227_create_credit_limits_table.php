@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('credit_limits', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('authorized_amount');
-            $table->unsignedTinyInteger('month');
-            $table->unsignedSmallInteger('year');
+            $table->unsignedBigInteger('authorized_amount');
+            $table->unsignedTinyInteger('month')->nullable();
+            $table->unsignedSmallInteger('year')->nullable();
             $table->unsignedBigInteger('contract_id');
             $table->unsignedBigInteger('credit_usage_type_id');
             $table->unsignedBigInteger('credit_modality_id');

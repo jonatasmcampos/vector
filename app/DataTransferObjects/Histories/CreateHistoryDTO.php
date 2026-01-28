@@ -8,7 +8,6 @@ class CreateHistoryDTO{
     
     private Carbon $date;
     private ?string $observation;
-    private string $model;
     private int $user_id;
     private int $action_id;
     private int $process_id;
@@ -17,7 +16,6 @@ class CreateHistoryDTO{
     public function __construct(
         Carbon $date,
         ?string $observation = null,
-        string $model,
         int $user_id,
         int $action_id,
         int $process_id,
@@ -25,7 +23,6 @@ class CreateHistoryDTO{
     ){
         $this->date = $date;
         $this->observation = $observation;
-        $this->model = $model;
         $this->user_id = $user_id;
         $this->action_id = $action_id;
         $this->process_id = $process_id;
@@ -40,11 +37,6 @@ class CreateHistoryDTO{
     public function getObservation(): ?string
     {
         return $this->observation;
-    }
-
-    public function getModel(): string
-    {
-        return $this->model;
     }
 
     public function getUserId(): int

@@ -23,7 +23,16 @@ class DatabaseSeeder extends Seeder
             CreditUsageTypeSeeder::class,
             CreditPeriodTypeSeeder::class,
             ActionSeeder::class,
-            ProcessSeeder::class
+            ProcessSeeder::class,
+            InstallmentTypeSeeder::class,
+            PaymentMethodSeeder::class,
+            PaymentNatureSeeder::class,
+            StatusSeeder::class,
+            InstallmentAmountTypeSeeder::class,
+            TransactionTypeSeeder::class,
+            AddressSeeder::class,
+            SupplierSeeder::class,
+            PurchaseOrderTypeSeeder::class
         ]);
     }
 }

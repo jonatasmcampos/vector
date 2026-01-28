@@ -26,7 +26,6 @@ class User extends Authenticatable
         'phone',
         'user_group_id',
         'user_master_cod',
-        'selected_contract_id',
         'active',
     ];
 

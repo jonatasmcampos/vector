@@ -2,7 +2,7 @@
 
 namespace App\Domain\ValueObjects;
 
-class AmountInCents{
+final class AmountInCents{
     
     private int $amount;
 
@@ -36,6 +36,11 @@ class AmountInCents{
 
     public function toBRLMoney(): BRLMoney{
         return BRLMoney::fromInteger($this->amount);
+    }
+
+    public static function fromFloat(float $amount): self{
+        $cents = (int) bcmul((string)$amount, "100", 0);
+        return new self($cents);
     }
 
 }

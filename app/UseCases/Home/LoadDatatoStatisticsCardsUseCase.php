@@ -27,7 +27,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
         $credit_limits = $this->getCreditLimit(
             $get_data_to_dashboard_dto->getMonth(),
             $get_data_to_dashboard_dto->getYear(),
-            $get_data_to_dashboard_dto->getContractId()
+            $get_data_to_dashboard_dto->getContractId(),
+            $get_data_to_dashboard_dto->getCreditUsageTypeId()
         );
         
         return $this->getData($credit_limits);
@@ -49,8 +50,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
                 $data[] = [
                     'title' => 'Saldo de compras',
                     'subtitle' => 'Valor disponível para novas compras',
-                    'value' => AmountInCents::fromInteger($credit_limit->credit_limit_balance->balance)->toBRLMoney()->toString(),
-                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->credit_limit_balance->balance),
+                    'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
+                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
                 ];
             }
             if($credit_limit->isPaymentModality()){
@@ -63,8 +64,8 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
                 $data[] =  [
                     'title' => 'Saldo de pagamentos',
                     'subtitle' => 'Valor disponível para novos pagamentos',
-                    'value' => AmountInCents::fromInteger($credit_limit->credit_limit_balance->balance)->toBRLMoney()->toString(),
-                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->credit_limit_balance->balance),
+                    'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
+                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
                 ];
             }
         }        
@@ -74,9 +75,10 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
     private function getCreditLimit(
         int $month,
         int $year,
-        int $contract_id
+        int $contract_id,
+        int $credit_usage_type_id
     ): Collection{
-        return $this->credit_limit_repository->getByMonthYearAndContractId($month, $year, $contract_id);
+        return $this->credit_limit_repository->getByMonthYearContractIdAndUsageTypeId($month, $year, $contract_id, $credit_usage_type_id);
     }
     
 }

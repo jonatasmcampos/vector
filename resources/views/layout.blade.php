@@ -73,21 +73,23 @@
 
             {{-- Breadcrumb --}}
             <section class="breadcrumb-custom mb-4">
-                @foreach (Request::segments() as $index => $segment)
+                @foreach (Request::segments() as $segment)
                     @php
-                        $isId = is_numeric($segment);
-                        $texto = ucfirst(str_replace('-', ' ', $segment));
+                        if (ctype_digit($segment)) {
+                            $texto = 'Detalhes';
+                        } else {
+                            $texto = ucfirst(str_replace('-', ' ', $segment));
+                        }
                     @endphp
 
-                    @if (!$isId)
-                        <span>{{ $texto }}</span>
+                    <span>{{ $texto }}</span>
 
-                        @if (!$loop->last)
-                            <i class="bi bi-chevron-right mx-2"></i>
-                        @endif
+                    @if (!$loop->last)
+                        <i class="bi bi-chevron-right mx-2"></i>
                     @endif
                 @endforeach
             </section>
+
 
             {{-- Conteúdo da página --}}
             @yield('content')

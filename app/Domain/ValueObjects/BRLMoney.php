@@ -2,7 +2,7 @@
 
 namespace App\Domain\ValueObjects;
 
-class BRLMoney{
+final class BRLMoney{
     private float $amount;
 
     public function __construct(float $amount)

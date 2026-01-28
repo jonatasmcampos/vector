@@ -38,19 +38,19 @@ class CreditLimit extends Model
     }
 
     public function credit_usage_type(){
-        return $this->belongsTo(Contract::class, 'credit_usage_type_id', 'id');
+        return $this->belongsTo(CreditUsageType::class, 'credit_usage_type_id', 'id');
     }
 
     public function credit_modality(){
-        return $this->belongsTo(Contract::class, 'credit_modality_id', 'id');
+        return $this->belongsTo(CreditModality::class, 'credit_modality_id', 'id');
     }
 
     public function credit_period_type(){
-        return $this->belongsTo(Contract::class, 'credit_period_type_id', 'id');
+        return $this->belongsTo(CreditUsageType::class, 'credit_period_type_id', 'id');
     }
 
-    public function credit_limit_balance(){
-        return $this->hasOne(CreditLimitBalance::class, 'credit_limit_id', 'id');
+    public function monthly_credit_limit_balance(){
+        return $this->hasOne(MonthlyCreditLimitBalance::class, 'credit_limit_id', 'id');
     }
 
     public function isAcquisitionModality(): bool

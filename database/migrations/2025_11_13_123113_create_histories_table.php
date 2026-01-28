@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->dateTime('date');
             $table->string('observation')->nullable();
-            $table->string('model');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('action_id');
             $table->unsignedBigInteger('process_id');

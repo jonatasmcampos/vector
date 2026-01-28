@@ -21,7 +21,6 @@ class CreateHistoryUseCase{
         return $this->history_repository->create(
             $create_history_dto->getDate(),
             $create_history_dto->getObservation(),
-            $create_history_dto->getModel(),
             $create_history_dto->getUserId(),
             $create_history_dto->getActionId(),
             $create_history_dto->getProcessId(),

@@ -20,6 +20,9 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mysqli zip gd
 
+# 👉 habilita BCMath
+RUN docker-php-ext-install bcmath
+
 # Instalar extensões PHP necessárias
 RUN docker-php-ext-install pdo pdo_mysql mysqli zip
 

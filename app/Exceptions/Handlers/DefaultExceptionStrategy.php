@@ -17,7 +17,9 @@ class DefaultExceptionStrategy implements ExceptionStrategyInterface
         return response()->json([
             'status' => 500,
             'success' => false,
-            'message' => $exception->getMessage() ?: 'Ocorreu um erro interno no servidor.'
+            'message' => $exception->getMessage() ?: 'Ocorreu um erro interno no servidor.',
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine()
         ], 500);
     }
 }
