@@ -36,7 +36,7 @@
                             <select required name="credit_usage_type_id" id="select_usage_type" class="form-select">
                                 <option value="">Selectione a finalidade ... </option>
                                 @foreach ($credit_usage_types as $credit_usage_type_id => $credit_usage_type)
-                                    <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type }}</option>
+                                    <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type['description'] }}</option>
                                 @endforeach
                             </select>
                         </div>

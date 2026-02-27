@@ -5,6 +5,7 @@ namespace App\UseCases\CreditLimitBalances;
 use App\DataTransferObjects\CreditLimitBalance\VerifyBalanceDTO;
 use App\Domain\ValueObjects\AmountInCents;
 use App\Domain\ValueObjects\Date;
+use App\Models\Settings;
 use Carbon\Carbon;
 class VerifyBalanceUseCase{
 
@@ -15,8 +16,23 @@ class VerifyBalanceUseCase{
     }
 
     private function verifyBalance(VerifyBalanceDTO $verify_balance_dto){
-        $this->checkAquisitionBalance($verify_balance_dto->getCurrentAcquisitionBalance(), $verify_balance_dto->getTotalAmount());
-        $this->checkPaymentBalance($verify_balance_dto->getCurrentPaymentBalance(), $verify_balance_dto->getInstallments());
+
+        $validatePayment = (bool) Settings::where(
+            'key',
+            'validate-balance.purchase-order-payment-on-acquisition'
+        )->value('value');
+
+        $this->checkAquisitionBalance(
+            $verify_balance_dto->getCurrentAcquisitionBalance(),
+            $verify_balance_dto->getTotalAmount()
+        );
+
+        if ($validatePayment) {
+            $this->checkPaymentBalance(
+                $verify_balance_dto->getCurrentPaymentBalance(),
+                $verify_balance_dto->getInstallments()
+            );
+        }
         return true;
     }
 

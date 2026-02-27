@@ -8,6 +8,8 @@ enum ActionEnum: int
     case MANAGE_CREATE_CREDIT_LIMIT_BALANCE = 2;
     case PURCHASE_GENERATED = 3;
     case CREDIT_LIMIT_BALANCE_UPDATED = 4;
+    case BALANCE_VALIDATION_SETTINGS_UPDATED = 5;
+    case CREDIT_LIMITS_SETTINGS_UPDATED = 6;
 
     public static function getDataToInsert(): array{
         return [
@@ -30,6 +32,16 @@ enum ActionEnum: int
                 'id' => self::CREDIT_LIMIT_BALANCE_UPDATED->value,
                 'name' => 'limite de crédito atualizado',
                 'description' => 'foi atualizado o limite de crédito',
+            ],
+            [
+                'id' => self::BALANCE_VALIDATION_SETTINGS_UPDATED->value,
+                'name' => 'configuração de validação de saldo atualizada',
+                'description' => 'foi atualizada a configuração de validação de saldo',
+            ],
+            [
+                'id' => self::CREDIT_LIMITS_SETTINGS_UPDATED->value,
+                'name' => 'configuração de limite de crédito atualizada',
+                'description' => 'foi atualizada a configuração de limite de crédito',
             ],
         ];
     }

@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum ContractEnum: int
 {
+    case ALL = 99; 
     case CT5 = 1;
     case CT6 = 2;
 
@@ -17,6 +18,15 @@ enum ContractEnum: int
     public static function getDataToInsert(): array
     {
         return [
+            [
+                'id' => self::ALL->value,
+                'name' => 'ação em todos os contratos',
+                'description' => 'referente a mudanças que causem efeitos em todos os contratos',
+                'contractor' => null,
+                'contract_master_cod' => 99,
+                'code' => 'todos',
+                'active' => true,
+            ],
             [
                 'id' => self::CT5->value,
                 'name' => '[CT05] 201/2020 - Pref. Municipal de Anápolis',
