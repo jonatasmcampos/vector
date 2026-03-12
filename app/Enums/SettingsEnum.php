@@ -18,7 +18,7 @@ enum SettingsEnum: string
             [
                 'id' => 2,
                 'key' => self::LIMIT_SUPPLY_PERIOD_TYPE->value,
-                'value' => 'monthly',
+                'value' => CreditPeriodTypeEnum::MONTHLY->name,
                 'group_name' => 'limit'
             ],
         ];

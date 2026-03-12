@@ -40,33 +40,16 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-12 col-xl-4">
-                            <label for="select_modality">Qual modalidade: <span style="color: red">*</span></label>
-                            <select required name="credit_modality_id" id="select_modality" class="form-select">
-                                <option value="">Selectione a modalidade ... </option>
-                                @foreach ($credit_modalities as $credit_modality_id => $credit_modality)
-                                    <option value="{{ $credit_modality_id }}">{{ $credit_modality }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12 col-xl-6 mb-3 mb-xl-0">
+                        <div class="col-12 col-xl-4 mb-3 mb-xl-0">
                             <label for="select_period_types">Vigência: <span style="color: red">*</span></label>
                             <select required name="credit_period_type_id" id="select_period_types" class="form-select">
-                                <option value="{{ App\Enums\CreditPeriodTypeEnum::MONTHLY->value}}" selected>{{ $credit_period_types[App\Enums\CreditPeriodTypeEnum::MONTHLY->value] }}</option>
-                            </select>
-                        </div>
-                        <div class="col-12 col-xl-6">
-                            <label for="select_reference_month">Mês de referência: <span style="color: red">*</span></label>
-                            <select required name="month" id="select_reference_month" class="form-select">
-                                <option value="">Selectione um mês de referência ... </option>
-                                @foreach ($months as $index => $month)
-                                    <option value="{{ $index + 1 }}">{{ $month }}</option>
-                                @endforeach
+                                @if($settings['monthly_credit_period'])
+                                    <option value="{{ App\Enums\CreditPeriodTypeEnum::MONTHLY->value}}" selected>{{ $credit_period_types[App\Enums\CreditPeriodTypeEnum::MONTHLY->value] }}</option>
+                                @endif
                             </select>
                         </div>
                     </div>
+                    @include('creditLimit.monthlyCreditPeriodFields')
                 </form>
             </div>
         </div>
@@ -113,7 +96,6 @@
                             enableButton('btn_create_limit');
                         },
                         error: function(err){
-                        console.log(err.responseJSON)
                             if(err.responseJSON.errors){
                                 toastr.error(err.responseJSON.errors);
                             } else {
