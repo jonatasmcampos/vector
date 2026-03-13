@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
             TransactionTypeSeeder::class,
             AddressSeeder::class,
             SupplierSeeder::class,
-            PurchaseOrderTypeSeeder::class
+            PurchaseOrderTypeSeeder::class,
+            SettingsSeeder::class
         ]);
     }
 }

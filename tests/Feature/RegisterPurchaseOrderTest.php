@@ -17,7 +17,7 @@ class RegisterPurchaseOrderTest extends TestCase
         $payload = [
             "header" => [
                 "payload_type" => "ordem_de_compra",
-                "action_date" => "2026-01-01T12:23:38.000000Z"
+                "action_date" => "2026-03-01T12:23:38.000000Z"
             ],
             "payload" => [
                 "purchase_order" => [
@@ -53,7 +53,7 @@ class RegisterPurchaseOrderTest extends TestCase
                         "order" => "1",
                         "installment_amount" => "100",
                         "installment_type_id" => "2",
-                        "due_day" => "2025-12-10",
+                        "due_day" => "2026-03-10",
                         "external_identifier" => "60"
                     ],
                     [
@@ -61,7 +61,7 @@ class RegisterPurchaseOrderTest extends TestCase
                         "order" => "1",
                         "installment_amount" => 57.90,
                         "installment_type_id" => "2",
-                        "due_day" => "2025-12-30",
+                        "due_day" => "2026-04-30",
                         "external_identifier" => "60"
                     ],
                     [
@@ -69,7 +69,7 @@ class RegisterPurchaseOrderTest extends TestCase
                         "order" => "2",
                         "installment_amount" => "93.85",
                         "installment_type_id" => "2",
-                        "due_day" => "2026-01-18",
+                        "due_day" => "2026-05-18",
                         "external_identifier" => "68"
                     ],
                     [
@@ -77,7 +77,7 @@ class RegisterPurchaseOrderTest extends TestCase
                         "order" => "3",
                         "installment_amount" => "93.85",
                         "installment_type_id" => "2",
-                        "due_day" => "2026-02-17",
+                        "due_day" => "2026-06-17",
                         "external_identifier" => "69"
                     ]
                 ]

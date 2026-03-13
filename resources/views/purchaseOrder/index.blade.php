@@ -59,7 +59,7 @@
                 ['user.name', 'Criado por'],
                 ['action', 'Ação', false, false],
             ];
-            const ROUTE = @json(route('purchase-order.list'));
+            const ROUTE = @json(route('external-data.purchase-order.list'));
             $(document).ready(function(){
                 const COLUMNS = prepareColumnsForYajra(DATA);
                 buildYajra('purchase-order-list', COLUMNS, ROUTE);

@@ -9,9 +9,9 @@ use App\Enums\CreditPeriodTypeEnum;
 use App\Enums\CreditUsageTypeEnum;
 use App\Helpers\Post;
 use App\Http\Requests\CreditLimits\CreateCreditLimitFormRequest;
-use App\UseCases\CreditLimits\CreateCreditLimitFactory;
 use App\UseCases\CreditLimits\GetCreditLimitsList;
 use App\UseCases\CreditLimits\ManageCreditLimitCreationUseCase;
+use App\UseCases\Settings\GetSettingsToCreditLimitCreationUseCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,13 +19,16 @@ class CreditLimitController extends Controller
 {
     private ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case;
     private GetCreditLimitsList $get_credit_limits_list;
+    private GetSettingsToCreditLimitCreationUseCase $get_settings_to_credit_limit_creation_use_case;
 
     public function __construct(
         ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case,
-        GetCreditLimitsList $get_credit_limits_list
+        GetCreditLimitsList $get_credit_limits_list,
+        GetSettingsToCreditLimitCreationUseCase $get_settings_to_credit_limit_creation_use_case
     ){
         $this->manage_credit_limit_creation_use_case = $manage_credit_limit_creation_use_case;
         $this->get_credit_limits_list = $get_credit_limits_list;
+        $this->get_settings_to_credit_limit_creation_use_case = $get_settings_to_credit_limit_creation_use_case;
     }
 
     public function index(){
@@ -38,7 +41,8 @@ class CreditLimitController extends Controller
             'months' => getMonths(),
             'credit_usage_types' => CreditUsageTypeEnum::getAll(),
             'credit_modalities' => CreditModalityEnum::getAll(),
-            'credit_period_types' => CreditPeriodTypeEnum::getAll()
+            'credit_period_types' => CreditPeriodTypeEnum::getAll(),
+            'settings' => $this->get_settings_to_credit_limit_creation_use_case->get()
         ]);
     }
 

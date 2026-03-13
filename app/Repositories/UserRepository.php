@@ -14,4 +14,14 @@ class UserRepository {
         }
         return $user;
     }
+
+    public function getById(
+        int $user_id
+    ): ?User{
+        $user = User::find($user_id);
+        if(!$user){
+            throw new \Exception("Usuário não encontrado!", 404);
+        }
+        return $user;
+    }
 }

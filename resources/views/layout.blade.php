@@ -73,6 +73,7 @@
 
             {{-- Breadcrumb --}}
             <section class="breadcrumb-custom mb-4">
+                <a class="fw-bold" style="color: #89aaac !important" href="{{route('view.home')}}">Página inicial</a>  <i class="bi bi-chevron-right mx-2"></i>
                 @foreach (Request::segments() as $segment)
                     @php
                         if (ctype_digit($segment)) {

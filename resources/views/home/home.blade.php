@@ -94,7 +94,7 @@
                     <label for="select_usage_type">Tipo de uso</label>
                     <select class="form-select me-2" name="credit_usage_type_id" id="select_usage_type">
                         @foreach ($credit_usage_types as $credit_usage_type_id => $credit_usage_type)
-                            <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type }}</option>
+                            <option value="{{ $credit_usage_type_id }}">{{ $credit_usage_type['description'] }}</option>
                         @endforeach
                     </select>
                 </div>

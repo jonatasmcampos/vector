@@ -8,7 +8,10 @@ enum CreditUsageTypeEnum: int
 
     public static function getAll(){
         return [
-            self::SUPPLY->value => 'Insumo',
+            self::SUPPLY->value => [
+                'name' => self::SUPPLY->name,
+                'description' => 'Insumo'
+            ],
         ];
     }
 
