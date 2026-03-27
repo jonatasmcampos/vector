@@ -65,4 +65,15 @@ class CreditLimitRepository {
         ->where('active', true)
         ->first();
     }
+
+    public function getCreditLimitByYearContractIdAndUsageTypeId(
+        int $year,
+        int $contract_id,
+        int $credit_usage_type_id
+    ){
+        return CreditLimit::where('year', $year)
+        ->where('contract_id', $contract_id)
+        ->where('credit_usage_type_id', $credit_usage_type_id)
+        ->get();
+    }
 }

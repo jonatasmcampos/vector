@@ -17,6 +17,8 @@ Route::get('/sair', [AuthenticationController::class, 'logout'])->name('auth.log
 Route::middleware(AuthenticatedMiddleware::class)->group(function(){
     Route::get('/dashboard', [HomeController::class, 'home'])->name('view.home');
     Route::get('/dashboard/load/cards', [HomeController::class, 'loadCards'])->name('view.home.load.cards');
+    Route::get('/dashboard/load/chart/limit-vs-purchaseorders', [HomeController::class, 'loadLimitVsPurchaseOrdersChart'])->name('view.home.load.chart.limit-vs-purchaseorder');
+    Route::get('/dashboard/load/budget-health', [HomeController::class, 'loadBudgetHealth'])->name('view.home.load.budget-health');
 
 
     Route::get('/gerenciar/limites/listagem', [CreditLimitController::class, 'index'])->name('manage.limits.index');

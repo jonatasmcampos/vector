@@ -54,20 +54,20 @@ class LoadDatatoStatisticsCardsUseCase implements GetDataToDashboardInterface{
                     'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
                 ];
             }
-            if($credit_limit->isPaymentModality()){
-                $data[] = [
-                    'title' => 'Autorizado para pagamentos',
-                    'subtitle' => 'Valor autorizado para pagamentos',
-                    'value' => AmountInCents::fromInteger($credit_limit->authorized_amount)->toBRLMoney()->toString(),
-                    'progress' => 100,
-                ];
-                $data[] =  [
-                    'title' => 'Saldo de pagamentos',
-                    'subtitle' => 'Valor disponível para novos pagamentos',
-                    'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
-                    'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
-                ];
-            }
+            // if($credit_limit->isPaymentModality()){
+            //     $data[] = [
+            //         'title' => 'Autorizado para pagamentos',
+            //         'subtitle' => 'Valor autorizado para pagamentos',
+            //         'value' => AmountInCents::fromInteger($credit_limit->authorized_amount)->toBRLMoney()->toString(),
+            //         'progress' => 100,
+            //     ];
+            //     $data[] =  [
+            //         'title' => 'Saldo de pagamentos',
+            //         'subtitle' => 'Valor disponível para novos pagamentos',
+            //         'value' => AmountInCents::fromInteger($credit_limit->monthly_credit_limit_balance->balance)->toBRLMoney()->toString(),
+            //         'progress' => calculatePercentage($credit_limit->authorized_amount, $credit_limit->monthly_credit_limit_balance->balance),
+            //     ];
+            // }
         }        
         return $data;
     }
