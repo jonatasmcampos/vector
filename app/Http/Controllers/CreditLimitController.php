@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\DataTransferObjects\CreditLimits\CreateCreditLimitDTO;
+use App\Enums\ContractEnum;
+use App\Enums\CreditModalityEnum;
+use App\Enums\CreditPeriodTypeEnum;
+use App\Enums\CreditUsageTypeEnum;
+use App\Helpers\Post;
+use App\Http\Requests\CreditLimits\CreateCreditLimitFormRequest;
+use App\UseCases\CreditLimits\GetCreditLimitsList;
+use App\UseCases\CreditLimits\ManageCreditLimitCreationUseCase;
+use App\UseCases\Settings\GetSettingsToCreditLimitCreationUseCase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class CreditLimitController extends Controller
+{
+    private ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case;
+    private GetCreditLimitsList $get_credit_limits_list;
+    private GetSettingsToCreditLimitCreationUseCase $get_settings_to_credit_limit_creation_use_case;
+
+    public function __construct(
+        ManageCreditLimitCreationUseCase $manage_credit_limit_creation_use_case,
+        GetCreditLimitsList $get_credit_limits_list,
+        GetSettingsToCreditLimitCreationUseCase $get_settings_to_credit_limit_creation_use_case
+    ){
+        $this->manage_credit_limit_creation_use_case = $manage_credit_limit_creation_use_case;
+        $this->get_credit_limits_list = $get_credit_limits_list;
+        $this->get_settings_to_credit_limit_creation_use_case = $get_settings_to_credit_limit_creation_use_case;
+    }
+
+    public function index(){
+        return view('creditLimit.index');
+    }
+
+    public function create(){
+        return view('creditLimit.create', [
+            'contracts' => ContractEnum::getAll(),
+            'months' => getMonths(),
+            'credit_usage_types' => CreditUsageTypeEnum::getAll(),
+            'credit_modalities' => CreditModalityEnum::getAll(),
+            'credit_period_types' => CreditPeriodTypeEnum::getAll(),
+            'settings' => $this->get_settings_to_credit_limit_creation_use_case->get()
+        ]);
+    }
+
+    public function store(CreateCreditLimitFormRequest $request){
+        $params = Post::anti_injection_array($request->all());
+        $create_credit_limit_request = new CreateCreditLimitDTO($params, session('user.id'));
+        DB::transaction(function() use ($create_credit_limit_request){
+            $this->manage_credit_limit_creation_use_case->handle($create_credit_limit_request);
+        });
+        return response()->json([
+            'success' => true,
+            'message' => 'Limite cadastrado com sucesso!'
+        ]);
+    }
+
+    public function list(Request $request){
+        return $this->get_credit_limits_list->handle($request);
+    }
+
+}
