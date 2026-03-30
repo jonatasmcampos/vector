@@ -19,6 +19,44 @@ The project simulates a real-world corporate scenario where purchase requests mu
 
 ---
 
+## 📦 Requirements
+
+* 🐳 Docker
+
+---
+
+## ⚡ Quick Start
+
+```bash
+git clone https://github.com/jonatasmcampos/vector.git
+cd vector
+
+composer install
+sudo docker compose up -d --build
+
+docker exec -it vector bash
+cp .env.example .env
+php artisan key:generate
+php artisan vector:atualizar
+```
+
+---
+
+### 🔐 Permissions
+
+In some environments (especially when using Docker), it may be necessary to adjust folder permissions to allow Laravel to write logs and cache files.
+
+Run the following command inside the container:
+
+```
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+
+This ensures the application has the correct permissions to operate properly.
+
+---
+
 ## 🧠 Core Concept
 
 The main goal of the system is to:
@@ -98,11 +136,13 @@ Creates a purchase order and validates it against the available budget.
 
 ---
 
-## 🧪 Testing
+## 🧪 Testing & Sample Data
 
-The project includes automated tests for validating the purchase order flow.
+The project includes an automated test that not only validates the purchase order flow, but also generates sample data to simulate real-world scenarios.
 
-### ▶️ Run specific test
+This allows the system to be initialized with meaningful data, making it easier to explore and understand its behavior without starting from an empty state.
+
+### ▶️ Run test and generate data
 
 Inside the container:
 
@@ -112,55 +152,9 @@ php artisan test tests/Feature/RegisterPurchaseOrderTest.php
 
 ---
 
-## 🐳 Running the Project (Docker)
-
-### 📦 Requirements
-
-* Docker
-* Docker Compose
-
----
-
-### ▶️ Setup
-
-```bash
-git clone https://github.com/jonatasmcampos/vector.git
-cd vector
-
-docker compose up -d
-```
-
----
-
-### ⚙️ Initialize the project
-
-After the containers are up:
-
-```bash
-docker exec -it vector bash
-php artisan vector:atualizar
-```
-
-This command will:
-
-* Run migrations
-* Seed the database
-
----
-
 ## 🗄️ Database
 
 The system uses **MySQL** as its primary database.
-
----
-
-## 🧪 Test Data
-
-A feature test is available to generate fake purchase orders and simulate real scenarios:
-
-```
-tests/Feature/RegisterPurchaseOrderTest.php
-```
 
 ---
 
