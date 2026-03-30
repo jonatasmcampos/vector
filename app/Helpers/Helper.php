@@ -69,6 +69,6 @@ if (!function_exists('calculatePercentage')) {
         if($total_amount == 0){
             return 0;
         }
-        return ($part_amount * 100) / $total_amount;
+        return round((($part_amount * 100) / $total_amount), 2);
     }
 }

@@ -57,4 +57,10 @@ class PurchaseOrderRepository{
         } 
         return $purchase_order;
     }
+
+    public function getPurchaseOrdersByContractId(
+        int $contract_id
+    ){
+        return PurchaseOrder::where('contract_id', $contract_id)->get();
+    }
 }

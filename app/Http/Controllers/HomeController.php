@@ -47,4 +47,28 @@ class HomeController extends Controller
         $use_case = $this->get_data_to_dashboard_factory->make('data-cards');
         return response()->json($use_case->load($get_data_to_dashboard_dto));
     }
+
+    public function loadLimitVsPurchaseOrdersChart(Request $request){
+        $params = (object)Post::anti_injection_array($request->all());
+        $get_data_to_dashboard_dto = new GetDataToDashboardDTO(
+            $params->month,
+            $params->year,
+            $params->contract_id,
+            $params->credit_usage_type_id
+        );
+        $use_case = $this->get_data_to_dashboard_factory->make('limit-vs-purchaseorders-chart');
+        return response()->json($use_case->load($get_data_to_dashboard_dto));
+    }
+
+    public function loadBudgetHealth(Request $request){
+        $params = (object)Post::anti_injection_array($request->all());
+        $get_data_to_dashboard_dto = new GetDataToDashboardDTO(
+            $params->month,
+            $params->year,
+            $params->contract_id,
+            $params->credit_usage_type_id
+        );
+        $use_case = $this->get_data_to_dashboard_factory->make('budget-health');
+        return response()->json($use_case->load($get_data_to_dashboard_dto));
+    }
 }

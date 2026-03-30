@@ -103,11 +103,21 @@
     </section>
 
     <section>
+        @include('home.budgetHealth')
+    </section>
+
+    <section class="mt-2">
         <div id="cards-container" class="row g-2"></div>
     </section>
 
+    <section class="mt-2">
+        @include('home.charts.limitsVsPurchaseOrders')
+    </section>
+    
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
+
             $(document).ready(function(){
                 loadCards();
                 $('#select_reference_month, #select_reference_year, #select_contract, #select_usage_type').on('change', loadCards);
@@ -141,7 +151,7 @@
 
                 data_cards.forEach(card => {
                     $('#cards-container').append(`
-                        <div class="col-12 col-xl-3">
+                        <div class="col-12 col-xl-6">
                             <div class="mb-2">
                                 <div class="card stat-card h-100">
                                     <div class="card-body p-4">
