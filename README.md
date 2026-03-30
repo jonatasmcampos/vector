@@ -1,59 +1,203 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Vector
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Vector** is a budget management system built to handle real-world purchasing workflows, ensuring that every purchase order is validated against available financial resources before being approved.
 
-## About Laravel
+The application centralizes budget control and purchase authorization, reducing the risk of overspending and bringing consistency to decision-making processes within the organization. By enforcing business rules at the application layer, Vector provides a reliable foundation for managing financial operations and evolving them over time.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Vector was built with a strong focus on **software architecture and code quality**, applying principles such as:
 
-## Learning Laravel
+* SOLID
+* Clean Architecture
+* Clean Code
+* Design Patterns
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+The project simulates a real-world corporate scenario where purchase requests must be validated against available budget before being approved.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🧠 Core Concept
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+The main goal of the system is to:
 
-### Premium Partners
+> Validate and register purchase orders based on budget availability.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+When a purchase order is created:
 
-## Contributing
+1. The system receives the request via API
+2. An **orchestrator** coordinates the flow
+3. Business rules are applied
+4. The order is either approved or rejected based on budget validation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🏗️ Architecture
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+The project follows **Clean Architecture principles**, separating responsibilities into well-defined layers:
 
-## Security Vulnerabilities
+### 📂 Structure
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* **Domain**
 
-## License
+  * Entities
+  * Value Objects
+  * Business rules
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* **Application**
+
+  * Use Cases
+  * DTOs (Data Transfer Objects)
+
+* **Infrastructure**
+
+  * Repository implementations
+  * External integrations
+
+* **Interfaces**
+
+  * Controllers (API / Web)
+
+---
+
+### 🔁 Flow Example
+
+```
+Controller → Orchestrator → UseCase → Domain → Repository
+```
+
+This ensures:
+
+* High maintainability
+* Testability
+* Clear separation of concerns
+
+---
+
+## 🔌 API
+
+### ➕ Create Purchase Order
+
+**Endpoint:**
+
+```
+POST /api/purchase-order/store
+```
+
+**Description:**
+Creates a purchase order and validates it against the available budget.
+
+**Flow:**
+
+* Receives payload
+* Sends to orchestrator
+* Executes validation + creation
+* Returns success or failure
+
+---
+
+## 🧪 Testing
+
+The project includes automated tests for validating the purchase order flow.
+
+### ▶️ Run specific test
+
+Inside the container:
+
+```
+php artisan test tests/Feature/RegisterPurchaseOrderTest.php
+```
+
+---
+
+## 🐳 Running the Project (Docker)
+
+### 📦 Requirements
+
+* Docker
+* Docker Compose
+
+---
+
+### ▶️ Setup
+
+```bash
+git clone https://github.com/jonatasmcampos/vector.git
+cd vector
+
+docker compose up -d
+```
+
+---
+
+### ⚙️ Initialize the project
+
+After the containers are up:
+
+```bash
+docker exec -it vector bash
+php artisan vector:atualizar
+```
+
+This command will:
+
+* Run migrations
+* Seed the database
+
+---
+
+## 🗄️ Database
+
+The system uses **MySQL** as its primary database.
+
+---
+
+## 🧪 Test Data
+
+A feature test is available to generate fake purchase orders and simulate real scenarios:
+
+```
+tests/Feature/RegisterPurchaseOrderTest.php
+```
+
+---
+
+## 💡 Key Technical Highlights
+
+* Clean Architecture implementation in Laravel
+* Use of DTOs for data transport
+* Value Objects to enforce domain rules
+* Orchestrator pattern to coordinate use cases
+* Repository pattern for data abstraction
+* Docker-based environment
+* Automated testing
+
+---
+
+## 📈 Future Improvements
+
+* Payment module implementation
+* Event-driven architecture (Kafka / queues)
+* Token-based authentication (JWT / Sanctum)
+* Improved logging and auditing
+* API documentation (Swagger / OpenAPI)
+
+---
+
+## 👨‍💻 Author
+
+Developed by **Jonatas Campos**
+
+---
+
+## ⭐ Final Notes
+
+This project was designed not only to solve a business problem, but also to demonstrate strong knowledge of:
+
+* Software architecture
+* Scalable system design
+* Backend best practices
+
+---
