@@ -43,6 +43,11 @@ php artisan key:generate
 php artisan vector:atualizar
 ```
 
+## 🌐 Access the application
+
+After the setup is complete, the application will be available at:
+`http://localhost:8000/entrar`
+
 ---
 
 ### 🔐 Permissions
