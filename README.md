@@ -19,9 +19,12 @@ The project simulates a real-world corporate scenario where purchase requests mu
 
 ---
 
-## 📦 Requirements
+## 🛠️ Tech Stack
 
-* 🐳 Docker
+* **Backend:** PHP 8.2, Laravel 12
+* **Frontend:** Bootstrap 5.3.8, DataTables 2.3.4, jQuery 3.7.1
+* **Database:** MySQL
+* **Environment:** Docker
 
 ---
 
