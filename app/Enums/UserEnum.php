@@ -13,9 +13,9 @@ enum UserEnum: int
         return [
             [
                 'id' => self::PRESIDENT->value,
-                'name' => 'Abraham Lincoln',
-                'login' => 'lincoln',
-                'email' => 'abrahamlincoln@presidente.com.br',
+                'name' => 'Fulano',
+                'login' => 'fulano',
+                'email' => 'fulano@presidente.com.br',
                 'password' => Hash::make(12345),
                 'cpf' => null,
                 'phone' => null,

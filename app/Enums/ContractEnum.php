@@ -10,8 +10,8 @@ enum ContractEnum: int
 
     public static function getAll(?bool $is_full_name = true){
         return [
-            self::CT5->value => ($is_full_name ? '[CT05] 201/2020 - Pref. Municipal de Anápolis' : 'CT5'),
-            self::CT6->value => ($is_full_name ? '[CT06] 976/2020  - Pref. Municipal de Aparecida de Goiânia' : 'CT6'),
+            self::CT5->value => ($is_full_name ? '[CT05] 000/2020 - Contrato A' : 'CT5'),
+            self::CT6->value => ($is_full_name ? '[CT06] 001/2020  - Contrato B' : 'CT6'),
         ];
     }
 
@@ -29,7 +29,7 @@ enum ContractEnum: int
             ],
             [
                 'id' => self::CT5->value,
-                'name' => '[CT05] 201/2020 - Pref. Municipal de Anápolis',
+                'name' => '[CT05] 000/2020 - Contrato A',
                 'description' => 'Anápolis',
                 'contractor' => null,
                 'contract_master_cod' => 2,
@@ -38,7 +38,7 @@ enum ContractEnum: int
             ],
             [
                 'id' => self::CT6->value,
-                'name' => '[CT06] 976/2020  - Pref. Municipal de Aparecida de Goiânia',
+                'name' => '[CT06] 001/2020  - Contrato B',
                 'description' => null,
                 'contractor' => null,
                 'contract_master_cod' => 3,
