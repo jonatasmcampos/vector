@@ -1,21 +1,21 @@
 # 🚀 Vector
 
-**Vector** is a budget management system built to handle real-world purchasing workflows, ensuring that every purchase order is validated against available financial resources before being approved.
+**Vector** é um sistema de gestão orçamentária desenvolvido para lidar com fluxos reais de compras, garantindo que cada ordem de compra seja validada com base nos recursos financeiros disponíveis antes de ser aprovada.
 
-The application centralizes budget control and purchase authorization, reducing the risk of overspending and bringing consistency to decision-making processes within the organization. By enforcing business rules at the application layer, Vector provides a reliable foundation for managing financial operations and evolving them over time.
+A aplicação centraliza o controle de orçamento e a autorização de compras, reduzindo o risco de gastos excessivos e trazendo consistência aos processos de tomada de decisão dentro da organização. Ao aplicar regras de negócio na camada da aplicação, o Vector fornece uma base confiável para gerenciar operações financeiras e evoluí-las ao longo do tempo.
 
 ---
 
-## 📌 Overview
+## 📌 Visão Geral
 
-Vector was built with a strong focus on **software architecture and code quality**, applying principles such as:
+O Vector foi desenvolvido com forte foco em **arquitetura de software e qualidade de código**, aplicando princípios como:
 
 * SOLID
 * Clean Architecture
 * Clean Code
 * Design Patterns
 
-The project simulates a real-world corporate scenario where purchase requests must be validated against available budget before being approved.
+O projeto simula um cenário corporativo real, onde solicitações de compra precisam ser validadas com base no orçamento disponível antes de serem aprovadas.
 
 ---
 
@@ -23,8 +23,8 @@ The project simulates a real-world corporate scenario where purchase requests mu
 
 * **Backend:** PHP 8.2, Laravel 12
 * **Frontend:** Bootstrap 5.3.8, DataTables 2.3.4, jQuery 3.7.1
-* **Database:** MySQL
-* **Environment:** Docker
+* **Banco de Dados:** MySQL
+* **Ambiente:** Docker
 
 ---
 
@@ -43,64 +43,64 @@ php artisan key:generate
 php artisan vector:atualizar
 ```
 
-## 🌐 Access the application
+## 🌐 Acesse a aplicação
 
-After the setup is complete, the application will be available at:
+Após a configuração estar completa, a aplicação estará disponível em:
 `http://localhost:8000/entrar`
 
 ---
 
-### 🔐 Permissions
+### 🔐 Permissões
 
-In some environments (especially when using Docker), it may be necessary to adjust folder permissions to allow Laravel to write logs and cache files.
+Em alguns ambientes (especialmente ao usar Docker), pode ser necessário ajustar as permissões de pastas para permitir que o Laravel escreva logs e arquivos de cache.
 
-Run the following command inside the container:
+Execute o seguinte comando dentro do container:
 
 ```
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 ```
 
-This ensures the application has the correct permissions to operate properly.
+Isso garante que a aplicação tenha as permissões corretas para funcionar adequadamente.
 
 ---
 
-## 🧠 Core Concept
+## 🧠 Conceito Principal
 
-The main goal of the system is to:
+O principal objetivo do sistema é:
 
-> Validate and register purchase orders based on budget availability.
+> Validar e registrar ordens de compra com base na disponibilidade orçamentária.
 
-When a purchase order is created:
+Quando uma ordem de compra é criada:
 
-1. The system receives the request via API
-2. An **orchestrator** coordinates the flow
-3. Business rules are applied
-4. The order is either approved or rejected based on budget validation
+1. O sistema recebe a requisição via API
+2. Um **orquestrador** coordena o fluxo
+3. As regras de negócio são aplicadas
+4. A ordem é aprovada ou rejeitada com base na validação do orçamento
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura
 
-The project follows **Clean Architecture principles**, separating responsibilities into well-defined layers:
+O projeto segue os princípios de **Clean Architecture**, separando responsabilidades em camadas bem definidas:
 
-### 📂 Structure
+### 📂 Estrutura
 
 * **Domain**
 
-  * Entities
+  * Entidades
   * Value Objects
-  * Business rules
+  * Regras de negócio
 
 * **Application**
 
-  * Use Cases
+  * Casos de uso
   * DTOs (Data Transfer Objects)
 
 * **Infrastructure**
 
-  * Repository implementations
-  * External integrations
+  * Implementações de repositórios
+  * Integrações externas
 
 * **Interfaces**
 
@@ -108,23 +108,23 @@ The project follows **Clean Architecture principles**, separating responsibiliti
 
 ---
 
-### 🔁 Flow Example
+### 🔁 Exemplo de Fluxo
 
 ```
 Controller → Orchestrator → UseCase → Domain → Repository
 ```
 
-This ensures:
+Isso garante:
 
-* High maintainability
-* Testability
-* Clear separation of concerns
+* Alta manutenibilidade
+* Testabilidade
+* Clara separação de responsabilidades
 
 ---
 
 ## 🔌 API
 
-### ➕ Create Purchase Order
+### ➕ Criar Ordem de Compra
 
 **Endpoint:**
 
@@ -132,27 +132,27 @@ This ensures:
 POST /api/purchase-order/store
 ```
 
-**Description:**
-Creates a purchase order and validates it against the available budget.
+**Descrição:**
+Cria uma ordem de compra e valida com base no orçamento disponível.
 
-**Flow:**
+**Fluxo:**
 
-* Receives payload
-* Sends to orchestrator
-* Executes validation + creation
-* Returns success or failure
+* Recebe o payload
+* Envia para o orquestrador
+* Executa validação + criação
+* Retorna sucesso ou falha
 
 ---
 
-## 🧪 Testing & Sample Data
+## 🧪 Testes & Dados de Exemplo
 
-The project includes an automated test that not only validates the purchase order flow, but also generates sample data to simulate real-world scenarios.
+O projeto inclui um teste automatizado que não apenas valida o fluxo de criação de ordens de compra, mas também gera dados de exemplo para simular cenários reais.
 
-This allows the system to be initialized with meaningful data, making it easier to explore and understand its behavior without starting from an empty state.
+Isso permite que o sistema seja inicializado com dados significativos, facilitando a exploração e o entendimento do seu comportamento sem começar do zero.
 
-### ▶️ Run test and generate data
+### ▶️ Executar teste e gerar dados
 
-Inside the container:
+Dentro do container:
 
 ```
 php artisan test tests/Feature/RegisterPurchaseOrderTest.php
@@ -160,46 +160,44 @@ php artisan test tests/Feature/RegisterPurchaseOrderTest.php
 
 ---
 
-## 🗄️ Database
+## 🗄️ Banco de Dados
 
-The system uses **MySQL** as its primary database.
-
----
-
-## 💡 Key Technical Highlights
-
-* Clean Architecture implementation in Laravel
-* Use of DTOs for data transport
-* Value Objects to enforce domain rules
-* Orchestrator pattern to coordinate use cases
-* Repository pattern for data abstraction
-* Docker-based environment
-* Automated testing
+O sistema utiliza **MySQL** como seu banco de dados principal.
 
 ---
 
-## 📈 Future Improvements
+## 💡 Principais Destaques Técnicos
 
-* Payment module implementation
-* Event-driven architecture (Kafka / queues)
-* Token-based authentication (JWT / Sanctum)
-* Improved logging and auditing
-* API documentation (Swagger / OpenAPI)
-
----
-
-## 👨‍💻 Author
-
-Developed by **Jonatas Campos**
+* Implementação de Clean Architecture no Laravel
+* Uso de DTOs para transporte de dados
+* Value Objects para reforçar regras de domínio
+* Padrão Orchestrator para coordenar casos de uso
+* Repository Pattern para abstração de dados
+* Ambiente baseado em Docker
+* Testes automatizados
 
 ---
 
-## ⭐ Final Notes
+## 📈 Melhorias Futuras
 
-This project was designed not only to solve a business problem, but also to demonstrate strong knowledge of:
-
-* Software architecture
-* Scalable system design
-* Backend best practices
+* Implementação de módulo de pagamentos
+* Arquitetura orientada a eventos (Kafka / filas)
+* Autenticação baseada em token (JWT / Sanctum)
+* Melhorias em logs e auditoria
+* Documentação da API (Swagger / OpenAPI)
 
 ---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Jonatas Campos**
+
+---
+
+## ⭐ Considerações Finais
+
+Este projeto foi desenvolvido não apenas para resolver um problema de negócio, mas também para demonstrar forte conhecimento em:
+
+* Arquitetura de software
+* Design de sistemas escaláveis
+* Boas práticas de desenvolvimento backend
